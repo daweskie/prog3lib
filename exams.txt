@@ -161,6 +161,12 @@ The size of buffer and number of buffers are configurable. All of non-used buffe
 User can et an empty buffer from the pool, and out it into the valid fifo.
 
 
+7. Logging
+
+Logging events to a file. All log messages have a label which is a hierarchic category for example error, fatal, debug, info etc.
+There is a config settings to controlling which messages are writeable to the log based on its category.
+The log function is need to be enough flexible - like printf - to accept messages, different variables and so on.
+The log system automatically writes the current date to every messages.
 
 
 
@@ -191,3 +197,15 @@ Serial Driver		Horvath Peter
 
 Task			Stercz György
 			Ambrus Ottó.
+
+Socket server           Tálos Benedek
+                        Lipcsei Dávid
+
+Socket Client           Bálint Dávid
+                        Gerber Olivér
+
+Motorola 		Matyi Daniel
+
+
+Logging			Gulyás Dániel
+			Gönczöl Péter
