@@ -1,0 +1,30 @@
+PROG3_beadando:
+
+GLIBC!!!!!!!!!!!!!!!!
+
+--------------------------------------------------
+Serial Packets:
+
+fifo kezelése, amibe vki teszi a packeteket
+
+start of text - üzenet - end of text
+
+feladat : "tegyél bele vmi adatot"
+
+max 128 byteos adat
+
+a fifoban csak ADATot/üzenetet tárolunk
+
+
+2db Pool : üresek és fel nem dolgozottak
+
+
+
+
+csinálni kell egy mappát, amibe dolgozunk
+ezen belül:
+  minden használt fájlt: /resource
+  
+  
+ http://vili.pmmf.hu/git/prog3lib.git
+----------------------------------------------------
