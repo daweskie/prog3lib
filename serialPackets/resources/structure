@@ -1,0 +1,37 @@
+serialPackets structure:
+
+define: MAX_UNUSED_SIZE, MAX_VALIDS_SIZE, MAX_DATA_SIZE
+
+------------------------------------------------------
+		Struct of Packets
+
+static struct{
+
+} Packet;
+
+------------------------------------------------------
+	    Pool for NOT checked Packets
+
+static struct{
+
+} Unused;		
+
+------------------------------------------------------
+		    	Check
+
+void check(){
+
+}      
+
+------------------------------------------------------
+	    	Pool for valid Packets
+  
+static struct{
+
+} Valid;
+
+------------------------------------------------------
+		  
+		      
+
+		 
