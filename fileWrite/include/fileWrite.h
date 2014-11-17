@@ -15,3 +15,22 @@ fileWrite library
 
 */
 
+/**
+ Default File Writer: write buffer to file, if not exits file or direction then the function create it
+
+ @param pathname path and filename (Where?)
+ @param buffer data for write (What?)
+ @return return 1 if eweryting is awesome, return 0 if error, return 2 if created new file or direction
+*/
+char fw_filewrite_default(const char *pathname, const char *buffer);
+
+/**
+ File Writer: write buffer to file, if not exits file or direction then the function create it
+
+ @param pathname path and filename (Where?)
+ @param buffer data for write (What?)
+ @param nexits 0 if file or direction is not exits and you don't create it; 1 if you want create it
+ @param content 0 if you would like re-write file; 1 if you would like to append a new data to the file
+ @return return 1 if eweryting is awesome, return 0 if error, return 2 if created new file or direction
+*/
+char fw_filewrite(const char *pathname, const char *buffer, const char nexits, const char content);
