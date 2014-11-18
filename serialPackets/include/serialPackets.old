@@ -9,19 +9,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 #include <pthread.h>
 #include <sys/queue.h>
 
 
-struct PoolUnUsed {
+struct PoolEmpty {
     int value;
-    TAILQ_ENTRY(PoolUnUsed) entries;
+    TAILQ_ENTRY(PoolEmpty) entries;
 };
 
-struct FifoUnUsed {
+struct FifoEmpty {
     struct TailHead *headp;
-    TAILQ_HEAD(TailHead, PoolUnUsed) head;
+    TAILQ_HEAD(TailHead, PoolEmpty) head;
     pthread_mutex_t mutex;
 };
 
@@ -29,27 +28,10 @@ struct FifoUnUsed {
 struct Unused {
     char *name;
     pthread_t thread;
-    struct FifoUnUsed *values;
-    struct FifoUnUsed *pool;
-    };
-
-struct PoolUsed {
-    int value;
-    TAILQ_ENTRY(PoolUsed) entries;
-};
-
-struct FifoUsed {
-    struct TailHead *headp;
-    TAILQ_HEAD(TailHead, PoolUsed) head;
-    pthread_mutex_t mutex;
-};
-
-
-struct Unused {
-    char *name;
-    pthread_t thread;
-    struct FifoUsed *values;
-    struct FifoUsed *pool;
+    int startValue;
+    int burst;
+    struct FifoEmpty *values;
+    struct FifoEmpty *pool;
     };
 /*
 serialPackets library
