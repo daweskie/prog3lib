@@ -34,7 +34,7 @@ struct frame_t {
 
 int main(int argc, char **argv) {
     printf("Starting %s\n",APP_NAME);
-    struct pool_t *pool = pool_init(POOL_SIZE, sizeof(struct frame_t));
+        struct pool_t *pool = pool_init(POOL_SIZE, sizeof(struct frame_t));
     assert(pool);
     assert(pool_max_size(pool)==POOL_SIZE);
     assert(pool_size(pool)==POOL_SIZE);
