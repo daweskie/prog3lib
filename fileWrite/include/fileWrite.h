@@ -15,15 +15,6 @@ fileWrite library
 
 */
 
-/**
- Default File Writer: write buffer to file, if not exits file or direction then the function create it
-
- @param pathname path and filename (Where?)
- @param buffer data for write (What?)
- @return return 1 if eweryting is awesome, return 0 if error, return 2 if created new file or direction
-*/
-char fw_fileWriteDefault(const char *pathname, const char *buffer);
-
 
 /**
  File Writer: write buffer to file, if not exits file or direction then the function create it
@@ -38,30 +29,39 @@ char fw_fileWrite(const char *pathname, const char *buffer, const char nexists, 
 
 
 /**
- Create file and write to TEMP/fw_{date}/{time}.txt
+ Default File Writer: write buffer to file, if not exits file or direction then the function create it
 
- @param pathname filename
+ @param pathname path and filename (Where?)
  @param buffer data for write (What?)
- @return return 1 if eweryting is awesome, return 0 if error
+ @return return 1 if everything is awesome, return 0 if error, return 2 if created new file or direction
 */
-char fw_fileWriteTempDefault(const char *buffer);
+char fw_fileWriteDefault(const char *pathname, const char *buffer);
 
 
 /**
  File Writer in TEMP: write buffer to file in temp, if not exits file or direction then the function create it
 
- @param pathname filename
+ @param filename filename
  @param buffer data for write (What?)
- @return return 1 if eweryting is awesome, return 0 if error, return 2 if created new file or direction
+ @return return 1 if everything is awesome, return 0 if error, return 2 if created new file or direction
 */
 char fw_fileWriteTemp(const char *filename, const char *buffer);
 
 
 /**
- File Exists info - Question: be or not be?
+ Create file and write to TEMP/fw_{date}/{time}.txt
+
+ @param buffer data for write (What?)
+ @return return 1 if everything is awesome, return 0 if error
+*/
+char fw_fileWriteTempDefault(const char *buffer);
+
+
+/**
+ Exists info - Question: be or not be?
 
  @param pathname path and filename
- @return return 1 if file is exits or 0 if not exits
+ @return return 1 if file or direction is exits or 0 if not exits
 */
 char fw_exists(const char *pathname);
 
@@ -85,21 +85,21 @@ char fw_delete(const char *pathname);
 
 
 /**
- Read Only info
+ Read Only
 
  @param pathname path and filename
- @return return 1 if read only or 0 if not exists
+ @return return 1 if read only or 0 if not
 */
-char fw_readonly(const char *pathname);
+char fw_readOnly(const char *pathname);
 
 
 /**
- Can write info
+ Can write
 
  @param pathname path and filename
- @return return 1 if can write, 0 if read only or not exists
+ @return return 1 if can write, 0 if not
 */
-char fw_canwrite(const char *pathname);
+char fw_canWrite(const char *pathname);
 
 
 /**

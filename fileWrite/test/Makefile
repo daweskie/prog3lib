@@ -13,6 +13,9 @@ include $(ZLIB)/settings.mk
 
 OBJS=$(patsubst $(SRC)/%.c,$(OBJ_ROOT)/$(ARCH)/%.o,$(wildcard $(SRC)/*.c))
 BIN_NAME=$(BIN_ROOT)/$(ARCH)/test
+INCLUDE_DIR+=-I ../include
+LIB_PATH+=-L ../lib/$(ARCH)
+LIB+=-l fileWrite
 
 $(info ==============================================)
 $(info arch:$(ARCH))
