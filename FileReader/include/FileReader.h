@@ -18,9 +18,9 @@ FileReader library
  File readable test.
 
  @param path path and filename of a file
- @return  return -1 if file or direction is not exist, return 0 if the file is not readable,return 1 if readable
+ @return  return 0 if file or direction is not exist, 1 file is readable
 */
-char FileIsReadable(const char *path);
+int FileIsReadable(const char *path);
 
 /**
  Reading a file to a configurable size and counts buffer.
@@ -29,7 +29,7 @@ char FileIsReadable(const char *path);
  @param buffer buffer address where you want to read
  @param size size of a buffer
  @param counts counts of buffers
- @return return -1 if file or direction is not exist, return 0 if buffers is not enugh,return 1 if read is success 
+ @return return -1 if file or direction is not exist, return 0 if buffers is not enugh,return 1 if read is success
 */
 char FileReader(const char *path, const char *buffer, int size, int counts);
 
@@ -38,7 +38,7 @@ char FileReader(const char *path, const char *buffer, int size, int counts);
 
  @param path path and filename of a file
  @param buffer buffer address where you want to read
- @return return -1 if file or direction is not exist, return 0 if buffers is not enugh,return 1 if read is success 
+ @return return -1 if file or direction is not exist, return 0 if buffers is not enugh,return 1 if read is success
 */
 char FileReaderDefault(const char *path, const char *buffer);
 
@@ -52,7 +52,7 @@ char FileReaderDefault(const char *path, const char *buffer);
  @param counts counts of buffers
  @param from number of line where start reading
  @param lines number of readnig lines
- @return return -1 if file or direction is not exist, return 0 if buffers is not enugh,return 1 if read is success 
+ @return return -1 if file or direction is not exist, return 0 if buffers is not enugh,return 1 if read is success
 */
 char FileLinesReader(const char *path, const char *buffer, int size, int counts, int from, int lines);
 
@@ -63,6 +63,6 @@ char FileLinesReader(const char *path, const char *buffer, int size, int counts,
  @param buffer buffer address where you want to read
  @param from number of line where start reading
  @param lines number of readnig lines
- @return return -1 if file or direction is not exist, return 0 if buffers is not enugh,return 1 if read is success 
+ @return return -1 if file or direction is not exist, return 0 if buffers is not enugh,return 1 if read is success
 */
 char FileLinesReaderDefault(const char *path, const char *buffer, int from, int lines);

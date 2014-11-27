@@ -18,74 +18,67 @@ ConfigModule library
 /**
 Open the config file. Read the keys and values.Close file.
 
- @param *fileName 
+ @param fileName
+ @param createIfNotExists is 1 means create if not exists
  @return 0 if file isn't exist, 1 if exist
 */
-int confInit(char *fileName);
+int cfgInit(char *fileName, int createIfNotExists);
+
+
+int cfgClose();
 
 /**
- * 
+ *
 @param *key is the keys
 @param *addr adddress of value
 @return value of string or 0 if the key isn't exist
  */
-char *getString(const char *key, char *addr);
+int cfgGetString(const char *key, char *addr);
 
 /**
- * 
+ *
 @param *key is the keys
 @param *def default value if key is not exist
 @return value of string or default value
  */
-char *getStringDef(const char *key, char *def);
+char cfgGetStringDef(const char *key, char def);
 
 /**
- * 
-@param *key is the keys
-@param *addr adddress of value
-@return value of char or 0 if the key isn't exist
- */
-char *getString(const char *key, int *addr);
-
-/**
- * 
-@param *key is the keys
-@param *def default value if key is not exist
-@return value of char or default value
- */
-char *getStringDef(const char *key, int *def);
-
-/**
- * 
+ *
 @param *key is the keys
 @param *addr adddress of value
 @return value of key or 0 if the key isn't exist
  */
-int *getString(int *key, int *addr);
+int cfgGetLong(long *key, long *addr);
 
 /**
- * 
+ *
 @param *key is the keys
 @param *def default value if key is not exist
 @return value of key or default value
  */
-int *getStringDef(int *key, int *def);
+long cfgGetLongDef(long *key, long def);
 
-/**
- * 
-@param *key is the keys
-@param *addr adddress of value
-@return value of key or 0 if the key isn't exist
- */
-long *getLong(long *key, int *addr);
+int cfgGetInt(long *key, int *addr);
 
-/**
- * 
-@param *key is the keys
-@param *def default value if key is not exist
-@return value of key or default value
- */
-long *getLongDef(long *key, int *def);
+int cfgGetIntDef(long *key, int def);
+
+int cfgGetShort(long *key, short *addr);
+
+int cfgGetShortDef(long *key, short def);
+
+int cfgGetFloat(long *key, float *addr);
+
+int cfgGetFloatDef(long *key, float def);
+
+int cfgGetDouble(long *key, double *addr);
+
+int cfgGetDoubleDef(long *key, double def);
+
+int cfgGetBool(long *key, int *addr);
+
+int cfgGetBoolDef(long *key, int def);
+
 
 
 /**
@@ -94,7 +87,8 @@ long *getLongDef(long *key, int *def);
     @return 1 if value set was successful or 0 if error occured
 
 */
-int setString(const char *key, const char *value);
+
+int cfgSetString(const char *key, const char *value);
 
 /**
     @param *key is the keys
@@ -102,7 +96,7 @@ int setString(const char *key, const char *value);
     @return 1 if value set was successful or 0 if error occured
 
 */
-int setChar(const char *key, const char value);
+int cfgSetChar(const char *key, const char value);
 
 /**
 	@param *key is the keys
@@ -110,7 +104,7 @@ int setChar(const char *key, const char value);
     @return 1 if value set was successful or 0 if error occured
 
 */
-short setShort(const char *key, const short value);
+short cfgSetShort(const char *key, const short value);
 
 /**
 	@param *key is the keys
@@ -118,7 +112,7 @@ short setShort(const char *key, const short value);
     @return 1 if value set was successful or 0 if error occured
 
 */
-int setInt(const char *key, const int value);
+int cfgSetInt(const char *key, const int value);
 
 /**
 	@param *key is the keys
@@ -126,7 +120,7 @@ int setInt(const char *key, const int value);
     @return 1 if value set was successful or 0 if error occured
 
 */
-long setLong(const char *key, const long value);
+int cfgSetLong(const char *key, const long value);
 
 /**
 	@param *key is the keys
@@ -134,7 +128,7 @@ long setLong(const char *key, const long value);
     @return 1 if value set was successful or 0 if error occured
 
 */
-float setFloat(const char *key, const float value);
+int cfgSetFloat(const char *key, const float value);
 
 /**
 	@param *key is the keys
@@ -142,7 +136,7 @@ float setFloat(const char *key, const float value);
     @return 1 if value set was successful or 0 if error occured
 
 */
-double setDouble(const char *key, const double value);
+int cfgSetDouble(const char *key, const double value);
 
 /**
 	@param *key is the keys
@@ -150,4 +144,4 @@ double setDouble(const char *key, const double value);
     @return 1 if value set was successful or 0 if error occured
 
 */
-int setBool(const char *key, const int value);
+int cfgSetBool(const char *key, const int value);
