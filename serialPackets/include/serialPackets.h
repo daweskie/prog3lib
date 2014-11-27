@@ -16,7 +16,7 @@ int n;
 
 /**Structure of Unused */
 
-struct Unused{
+struct unused{
     /** Tail queue un_head. */
     struct un_tailhead *un_headp;
 
@@ -44,7 +44,7 @@ struct Unused{
 
 /**Structure of Unused */
 
-struct Valid{
+struct valid{
     /** Tail queue val_head. */
     struct val_tailhead *val_headp;
 
