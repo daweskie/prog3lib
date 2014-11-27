@@ -16,7 +16,7 @@
 #include <fileWrite.h>
 #include <sys/stat.h>
 
-char nullOrEmpty(const char *str){
+int nullOrEmpty(const char *str){
     if (!(str && *str))
         return 1;
 
@@ -24,7 +24,7 @@ char nullOrEmpty(const char *str){
 }
 
 
-char fw_fod(const char *pathname){
+int fw_fod(const char *pathname){
     if(nullOrEmpty(pathname))
         return 0;
 
@@ -48,7 +48,7 @@ char fw_fod(const char *pathname){
 }
 
 
-char fw_exists(const char *pathname){
+int fw_exists(const char *pathname){
     if(nullOrEmpty(pathname))
         return 0;
 
@@ -59,7 +59,7 @@ char fw_exists(const char *pathname){
 }
 
 
-char fw_mkdir(const char *pathname){
+int fw_mkdir(const char *pathname){
     if(nullOrEmpty(pathname))
         return 0;
 
@@ -71,7 +71,8 @@ char fw_mkdir(const char *pathname){
     return 0;
 }
 
-char fw_readOnly(const char *pathname){
+
+int fw_readOnly(const char *pathname){
     if(nullOrEmpty(pathname))
         return 0;
 
@@ -91,7 +92,7 @@ char fw_readOnly(const char *pathname){
 }
 
 
-char fw_canWrite(const char *pathname){
+int fw_canWrite(const char *pathname){
     if(nullOrEmpty(pathname))
         return 0;
 
@@ -111,7 +112,7 @@ char fw_canWrite(const char *pathname){
 }
 
 
-char fw_delete(const char *pathname){
+int fw_delete(const char *pathname){
     if(nullOrEmpty(pathname))
         return 0;
 
