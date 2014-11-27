@@ -110,16 +110,31 @@ int val_overflow(struct Valid *valid);
 
 /** --------------------Actual beadando--------------------- */
 
-/** Gets packet to Unused */
+/** Gets packet to Unused
+    @param the pool.  It can be NULL
+    @return the element or NULL if pool is NULL or pool is empty
+
+*/
 struct Packet *unused_get(struct Unused *unused);
 
-/**Gives packet from Unused*/
+/**Put back packet to Unused
+    @param the pool.  It can be NULL
+    @param the item to put back. It can be NULL.
+
+*/
 void unused_give(struct Unused *unused, struct Packet *packet);
 
-/** Gets packet to Valid */
+/** Gets packet to Valid
+    @param the pool.  It can be NULL
+    @return the element or NULL if pool is NULL or pool is empty
+
+*/
 struct Packet *valid_get(struct Valid *valid);
 
-/**Gives packet from Unused*/
+/**Gives packet from Unused
+    @param the pool.  It can be NULL
+    @return the element or NULL if pool is NULL or pool is empty
+*/
 void valid_give(struct Valid *valid, struct Packet *packet);
 
 #endif // SERIALPACKETS_H_INCLUDED

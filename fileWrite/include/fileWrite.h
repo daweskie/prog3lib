@@ -25,7 +25,7 @@ fileWrite library
  @param content 0 if you would like re-write file; 1 if you would like to append a new data to the file
  @return return 1 if everything is awesome, return 0 if error, return 2 if created new file or direction
 */
-char fw_fileWrite(const char *pathname, const char *buffer, const char nexists, const char content);
+int fw_fileWrite(const char *pathname, const char *buffer, const char nexists, const char content);
 
 
 /**
@@ -35,7 +35,7 @@ char fw_fileWrite(const char *pathname, const char *buffer, const char nexists, 
  @param buffer data for write (What?)
  @return return 1 if everything is awesome, return 0 if error, return 2 if created new file or direction
 */
-char fw_fileWriteDefault(const char *pathname, const char *buffer);
+int fw_fileWriteDefault(const char *pathname, const char *buffer);
 
 
 /**
@@ -45,7 +45,7 @@ char fw_fileWriteDefault(const char *pathname, const char *buffer);
  @param buffer data for write (What?)
  @return return 1 if everything is awesome, return 0 if error, return 2 if created new file or direction
 */
-char fw_fileWriteTemp(const char *filename, const char *buffer);
+int fw_fileWriteTemp(const char *filename, const char *buffer);
 
 
 /**
@@ -54,7 +54,7 @@ char fw_fileWriteTemp(const char *filename, const char *buffer);
  @param buffer data for write (What?)
  @return return 1 if everything is awesome, return 0 if error
 */
-char fw_fileWriteTempDefault(const char *buffer);
+int fw_fileWriteTempDefault(const char *buffer);
 
 
 /**
@@ -63,7 +63,7 @@ char fw_fileWriteTempDefault(const char *buffer);
  @param pathname path and filename
  @return return 1 if file or direction is exits or 0 if not exits
 */
-char fw_exists(const char *pathname);
+int fw_exists(const char *pathname);
 
 
 /**
@@ -72,7 +72,7 @@ char fw_exists(const char *pathname);
  @param pathname path and filename
  @return return 1 if it is file, 2 if it is direction, 0 if not exists
 */
-char fw_fod(const char *pathname);
+int fw_fod(const char *pathname);
 
 
 /**
@@ -81,7 +81,7 @@ char fw_fod(const char *pathname);
  @param pathname path and filename
  @return return 1 if delete file, 2 if delete direction, 0 if error
 */
-char fw_delete(const char *pathname);
+int fw_delete(const char *pathname);
 
 
 /**
@@ -90,7 +90,7 @@ char fw_delete(const char *pathname);
  @param pathname path and filename
  @return return 1 if read only or 0 if not
 */
-char fw_readOnly(const char *pathname);
+int fw_readOnly(const char *pathname);
 
 
 /**
@@ -99,7 +99,7 @@ char fw_readOnly(const char *pathname);
  @param pathname path and filename
  @return return 1 if can write, 0 if not
 */
-char fw_canWrite(const char *pathname);
+int fw_canWrite(const char *pathname);
 
 
 /**
@@ -108,4 +108,4 @@ char fw_canWrite(const char *pathname);
  @param pathname path and filename
  @return return 1 if everything is awesome, 0 error
 */
-char fw_mkdir(const char *pathname);
+int fw_mkdir(const char *pathname);
