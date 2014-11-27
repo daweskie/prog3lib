@@ -24,3 +24,15 @@ logging library
  @return 1 OK, 0 not work
 */
 int logging_out(char type, char * app_name, char * value);
+
+
+
+
+
+
+
+
+
+
+
+

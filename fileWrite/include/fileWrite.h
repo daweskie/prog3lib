@@ -15,6 +15,16 @@ fileWrite library
 
 */
 
+struct FileWriter {
+    FILE lll
+};
+
+struct FileWriter *fwInit(const char *pathname, int append, uint32_t bufferSize, uint16_t bufferCount);
+
+int fwClose(struct FileWriter *fWriter);
+
+int fwWriteBuffer(struct FileWriter *fWriter, char *buffer, uint32_t size);
+
 
 /**
  File Writer: write buffer to file, if not exits file or direction then the function create it

@@ -108,6 +108,7 @@ int un_overflow(struct Unused *unused);
 /** Overflow in Valid */
 int val_overflow(struct Valid *valid);
 
+
 /** --------------------Actual beadando--------------------- */
 
 /** Gets packet to Unused
@@ -138,3 +139,23 @@ struct Packet *valid_get(struct Valid *valid);
 void valid_give(struct Valid *valid, struct Packet *packet);
 
 #endif // SERIALPACKETS_H_INCLUDED
+
+
+
+
+
+
+struct PacketFifo *spInit(unsigned int maxPackets, u_int16_t mtu);
+int spClose(struct PacketFifo *fifo);
+u_int16_t spGetMtu(struct PacketFifo *fifo);
+int spGetMaxPackets(struct PacketFifo *fifo);
+struct Packet *spGetPacketFromPool(struct PacketFifo *fifo);
+void spRecycle(struct PacketFifo *fifo, struct Packet *packet);
+bool spIsValidPackets(struct PacketFifo *fifo);
+struct Packet *spGetPacket(struct PacketFifo *fifo);
+int spPutPacket(struct PacketFifo *fifo, struct Packet *packet);
+long spGetAllPacketCounts(struct PacketFifo *fifo);
+long spGetErrorPacketCounts(struct PacketFifo *fifo);
+long spGetOverrunCounts(struct PacketFifo *fifo);
+void spIncErrorCounts(struct PacketFifo *fifo);
+void spIncOverrunCounts(struct PacketFifo *fifo);
