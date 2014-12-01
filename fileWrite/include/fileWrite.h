@@ -15,56 +15,65 @@ fileWrite library
 
 */
 
-struct FileWriter {
-    FILE lll
+#include <sys/stat.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+
+typedef struct FileWriter {
+    FILE *file;
+    char *buffer;
+    unsigned int position;
+    const unsigned int maxBufferSize;
 };
 
-struct FileWriter *fwInit(const char *pathname, int append, uint32_t bufferSize, uint16_t bufferCount);
-
-int fwClose(struct FileWriter *fWriter);
-
-int fwWriteBuffer(struct FileWriter *fWriter, char *buffer, uint32_t size);
-
-
 /**
- File Writer: write buffer to file, if not exits file or direction then the function create it
+ Initialise FileWriter variable
 
+ @param fWriter FileWriter variable
  @param pathname path and filename (Where?)
- @param buffer data for write (What?)
- @param nexists 0 if file or direction is not exits and you don't create it; 1 if you want create it
- @param content 0 if you would like re-write file; 1 if you would like to append a new data to the file
- @return return 1 if everything is awesome, return 0 if error, return 2 if created new file or direction
-*/
-int fw_fileWrite(const char *pathname, const char *buffer, const char nexists, const char content);
-
-
-/**
- Default File Writer: write buffer to file, if not exits file or direction then the function create it
-
- @param pathname path and filename (Where?)
- @param buffer data for write (What?)
- @return return 1 if everything is awesome, return 0 if error, return 2 if created new file or direction
-*/
-int fw_fileWriteDefault(const char *pathname, const char *buffer);
-
-
-/**
- File Writer in TEMP: write buffer to file in temp, if not exits file or direction then the function create it
-
- @param filename filename
- @param buffer data for write (What?)
- @return return 1 if everything is awesome, return 0 if error, return 2 if created new file or direction
-*/
-int fw_fileWriteTemp(const char *filename, const char *buffer);
-
-
-/**
- Create file and write to TEMP/fw_{date}/{time}.txt
-
- @param buffer data for write (What?)
+ @param append 0 if you would like re-write file; 1 if you would like to append a new data to the file
+ @param maxBufferSize maximum buffer size
  @return return 1 if everything is awesome, return 0 if error
 */
-int fw_fileWriteTempDefault(const char *buffer);
+int fwInit(struct FileWriter *fWriter, const char *pathname, int append, unsigned int maxBufferSize);
+
+
+/**
+ Add date to FileWriter
+
+ @param fWriter FileWriter variable
+ @param data Data
+ @param dataSize data size
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwAddtoBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize);
+
+
+/**
+ Clear date in FileWriter
+
+ @param fWriter FileWriter variable
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwClearBuffer(struct FileWriter *fWriter);
+
+
+/**
+ Write date with FileWriter
+
+ @param fWriter FileWriter variable
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwWriteBuffer(struct FileWriter *fWriter);
+
+/**
+ close FileWriter variable
+
+ @param fWriter FileWriter variable
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwClose(struct FileWriter *fWriter);
 
 
 /**
@@ -73,7 +82,7 @@ int fw_fileWriteTempDefault(const char *buffer);
  @param pathname path and filename
  @return return 1 if file or direction is exits or 0 if not exits
 */
-int fw_exists(const char *pathname);
+int fwExists(const char *pathname);
 
 
 /**
@@ -82,7 +91,7 @@ int fw_exists(const char *pathname);
  @param pathname path and filename
  @return return 1 if it is file, 2 if it is direction, 0 if not exists
 */
-int fw_fod(const char *pathname);
+int fwFoD(const char *pathname);
 
 
 /**
@@ -91,7 +100,7 @@ int fw_fod(const char *pathname);
  @param pathname path and filename
  @return return 1 if delete file, 2 if delete direction, 0 if error
 */
-int fw_delete(const char *pathname);
+int fwDelete(const char *pathname);
 
 
 /**
@@ -100,7 +109,7 @@ int fw_delete(const char *pathname);
  @param pathname path and filename
  @return return 1 if read only or 0 if not
 */
-int fw_readOnly(const char *pathname);
+int fwReadOnly(const char *pathname);
 
 
 /**
@@ -109,7 +118,7 @@ int fw_readOnly(const char *pathname);
  @param pathname path and filename
  @return return 1 if can write, 0 if not
 */
-int fw_canWrite(const char *pathname);
+int fwCanWrite(const char *pathname);
 
 
 /**
@@ -118,4 +127,4 @@ int fw_canWrite(const char *pathname);
  @param pathname path and filename
  @return return 1 if everything is awesome, 0 error
 */
-int fw_mkdir(const char *pathname);
+int fwMkDir(const char *pathname);

@@ -14,7 +14,6 @@
 * fileWrite
 */
 #include <fileWrite.h>
-#include <sys/stat.h>
 
 int nullOrEmpty(const char *str){
     if (!(str && *str))
@@ -24,7 +23,7 @@ int nullOrEmpty(const char *str){
 }
 
 
-int fw_fod(const char *pathname){
+int fwFoD(const char *pathname){
     if(nullOrEmpty(pathname))
         return 0;
 
@@ -48,18 +47,18 @@ int fw_fod(const char *pathname){
 }
 
 
-int fw_exists(const char *pathname){
+int fwExists(const char *pathname){
     if(nullOrEmpty(pathname))
         return 0;
 
-    if(fw_fod(pathname) == 1 || fw_fod(pathname) == 2)
+    if(fwFoD(pathname) == 1 || fwFoD(pathname) == 2)
         return 1;
 
     return 0;
 }
 
 
-int fw_mkdir(const char *pathname){
+int fwMkDir(const char *pathname){
     if(nullOrEmpty(pathname))
         return 0;
 
@@ -72,7 +71,7 @@ int fw_mkdir(const char *pathname){
 }
 
 
-int fw_readOnly(const char *pathname){
+int fwReadOnly(const char *pathname){
     if(nullOrEmpty(pathname))
         return 0;
 
@@ -92,7 +91,7 @@ int fw_readOnly(const char *pathname){
 }
 
 
-int fw_canWrite(const char *pathname){
+int fwCanWrite(const char *pathname){
     if(nullOrEmpty(pathname))
         return 0;
 
@@ -112,11 +111,11 @@ int fw_canWrite(const char *pathname){
 }
 
 
-int fw_delete(const char *pathname){
+int fwDelete(const char *pathname){
     if(nullOrEmpty(pathname))
         return 0;
 
-    switch(fw_fod(pathname)){
+    switch(fwFoD(pathname)){
         case 1:
             if(unlink(pathname)!= -1)
                 return 1;
@@ -129,4 +128,45 @@ int fw_delete(const char *pathname){
     }
 
     return 0;
+}
+
+
+int fwInit(struct FileWriter *fWriter, const char *pathname, int append, unsigned int maxBufferSize){
+    if(nullOrEmpty(pathname))
+        return 0;
+
+    int available = 0;
+    if(fwFoD(pathname)==1)
+        available = 1;
+
+    fWriter->buffer = (char*) malloc(maxBufferSize+1);
+    if(fWriter->buffer==NULL)
+        return 0;
+    *(fWriter->buffer) = '\0';
+
+    fWriter->position = 0;
+
+    if(append == 1)
+        fWriter->file = fopen(pathname, "a");
+    else
+        fWriter->file = fopen(pathname, "w");
+
+    return 1;
+}
+
+
+int fwAddtoBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize){
+    if(nullOrEmpty(data) || dataSize == 0)
+        return 0;
+
+    if(dataSize >= fWriter->maxBufferSize - fWriter->position)
+        return 0;
+
+    unsigned int i;
+    for(i = 0;dataSize == 0; dataSize--, i++, fWriter->position++){
+        *(fWriter->buffer+fWriter->position) = *(data + i);
+    }
+     *(fWriter->buffer+fWriter->position+1) = '\0';
+
+    return 1;
 }
