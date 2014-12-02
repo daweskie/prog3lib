@@ -91,11 +91,18 @@ int main(int argc, char *argv[]){
     }
 
     /*
-    struct FileWriter *proba;
-    fwInit(proba, "proba.txt", 0, 512);
+    struct FileWriter *proba = fwInit("proba.txt", 0, 50);
     char *szoveg = "sajt";
     fwAddtoBuffer(proba, szoveg, 4);
-    printf("Proba: %d\n", proba->position);*/
+    printf("Proba: %d\n", proba->position);
+    printf("Proba: %s\n", proba->buffer);
+    fwAddtoBuffer(proba, szoveg, 4);
+    printf("Proba: %d\n", proba->position);
+    printf("Proba: %s\n", proba->buffer);
+    fwClearBuffer(proba);
+    printf("Proba: %d\n", proba->position);
+    printf("Proba: %s\n", proba->buffer);
+    fwClose(proba);*/
 
     printf("fileWrite testing started\n");
     int result = test_fileWrite(argc, argv);

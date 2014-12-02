@@ -20,23 +20,22 @@ fileWrite library
 #include <stdlib.h>
 
 
-typedef struct FileWriter {
+struct FileWriter {
     FILE *file;
     char *buffer;
     unsigned int position;
-    const unsigned int maxBufferSize;
+    unsigned int maxBufferSize;
 };
 
 /**
  Initialise FileWriter variable
 
- @param fWriter FileWriter variable
  @param pathname path and filename (Where?)
  @param append 0 if you would like re-write file; 1 if you would like to append a new data to the file
  @param maxBufferSize maximum buffer size
- @return return 1 if everything is awesome, return 0 if error
+ @return FileWriter variable
 */
-int fwInit(struct FileWriter *fWriter, const char *pathname, int append, unsigned int maxBufferSize);
+struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBufferSize);
 
 
 /**

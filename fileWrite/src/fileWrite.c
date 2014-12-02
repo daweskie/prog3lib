@@ -131,27 +131,36 @@ int fwDelete(const char *pathname){
 }
 
 
-int fwInit(struct FileWriter *fWriter, const char *pathname, int append, unsigned int maxBufferSize){
+struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBufferSize){
     if(nullOrEmpty(pathname))
-        return 0;
+        return NULL;
 
     int available = 0;
     if(fwFoD(pathname)==1)
         available = 1;
 
-    fWriter->buffer = (char*) malloc(maxBufferSize+1);
-    if(fWriter->buffer==NULL)
-        return 0;
-    *(fWriter->buffer) = '\0';
 
-    fWriter->position = 0;
+    struct FileWriter *retVal = malloc(sizeof(struct FileWriter));
+    if (retVal == NULL)
+        return NULL;
+
+    retVal->buffer = malloc(maxBufferSize+1);
+    if (retVal->buffer == NULL) {
+        free (retVal);
+        return NULL;
+    }
+    retVal->maxBufferSize = maxBufferSize;
+
+    *(retVal->buffer) = '\0';
+
+    retVal->position = 0;
 
     if(append == 1)
-        fWriter->file = fopen(pathname, "a");
+        retVal->file = fopen(pathname, "a");
     else
-        fWriter->file = fopen(pathname, "w");
+        retVal->file = fopen(pathname, "w");
 
-    return 1;
+    return retVal;
 }
 
 
@@ -163,10 +172,26 @@ int fwAddtoBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize)
         return 0;
 
     unsigned int i;
-    for(i = 0;dataSize == 0; dataSize--, i++, fWriter->position++){
+    for(i = 0; dataSize; dataSize--, i++, fWriter->position++){
         *(fWriter->buffer+fWriter->position) = *(data + i);
     }
      *(fWriter->buffer+fWriter->position+1) = '\0';
 
     return 1;
+}
+
+
+int fwClearBuffer(struct FileWriter *fWriter){
+    fWriter->position = 0;
+    *(fWriter->buffer) = '\0';
+}
+
+
+int fwClose(struct FileWriter *fWriter){
+    if (fWriter != NULL) {
+        free (fWriter->buffer);
+        fclose(fWriter->file);
+        free (fWriter);
+        fWriter = NULL;
+    }
 }
