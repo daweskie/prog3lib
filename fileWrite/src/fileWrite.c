@@ -201,7 +201,7 @@ int fwClearBuffer(struct FileWriter *fWriter){
 
 
 int fwClose(struct FileWriter *fWriter){
-    if (notInitFileWriter(fWriter))
+    if (!fWriter)
         return 0;
 
     free (fWriter->buffer);
