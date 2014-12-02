@@ -95,22 +95,27 @@ int main(int argc, char *argv[]){
     printf("position: %d\n", proba->position);
     printf("nextPosition: %d\n", proba->nextPosition);
     printf("maxBufferSize: %d\n", proba->maxBufferSize);
+
     char *szoveg = "sajt";
     if(!fwAddtoBuffer(proba, szoveg, 4))
         printf("Televan!\n");
     printf("position: %d\n", proba->position);
     printf("nextPosition: %d\n", proba->nextPosition);
     printf("buffer: %s\n", proba->buffer);
+
     if(!fwAddtoBuffer(proba, szoveg, 2))
         printf("Televan!\n");
     printf("position: %d\n", proba->position);
     printf("nextPosition: %d\n", proba->nextPosition);
     printf("buffer: %s\n", proba->buffer);
+
     fwClearBuffer(proba);
     printf("position: %d\n", proba->position);
     printf("nextPosition: %d\n", proba->nextPosition);
     printf("buffer: %s\n", proba->buffer);
-    fwClose(proba);*/
+
+    fwClose(proba);
+    */
 
     printf("fileWrite testing started\n");
     int result = test_fileWrite(argc, argv);
