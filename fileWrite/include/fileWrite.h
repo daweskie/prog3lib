@@ -23,6 +23,7 @@ fileWrite library
 struct FileWriter {
     FILE *file;
     char *buffer;
+    unsigned int nextPosition;
     unsigned int position;
     unsigned int maxBufferSize;
 };

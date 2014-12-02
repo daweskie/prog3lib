@@ -153,6 +153,7 @@ struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBuff
 
     *(retVal->buffer) = '\0';
 
+    retVal->nextPosition = 0;
     retVal->position = 0;
 
     if(append == 1)
@@ -168,20 +169,24 @@ int fwAddtoBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize)
     if(nullOrEmpty(data) || dataSize == 0)
         return 0;
 
-    if(dataSize >= fWriter->maxBufferSize - fWriter->position)
+    if(dataSize > fWriter->maxBufferSize - fWriter->nextPosition)
         return 0;
 
     unsigned int i;
-    for(i = 0; dataSize; dataSize--, i++, fWriter->position++){
-        *(fWriter->buffer+fWriter->position) = *(data + i);
+    for(i=0; dataSize && *(data+i); dataSize--, i++, fWriter->nextPosition++){
+        *(fWriter->buffer+fWriter->nextPosition) = *(data+i);
     }
-     *(fWriter->buffer+fWriter->position+1) = '\0';
+
+    fWriter->position = fWriter->nextPosition - 1;
+
+    *(fWriter->buffer+fWriter->nextPosition+1) = '\0';
 
     return 1;
 }
 
 
 int fwClearBuffer(struct FileWriter *fWriter){
+    fWriter->nextPosition = 0;
     fWriter->position = 0;
     *(fWriter->buffer) = '\0';
 }
