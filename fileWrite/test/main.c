@@ -90,50 +90,63 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
 
-    /* manual test */
-    struct FileWriter *proba = fwInit("proba.txt", 0, 4);
-    printf("position: %d\n", proba->position);
-    printf("nextPosition: %d\n", proba->nextPosition);
-    printf("maxBufferSize: %d\n", proba->maxBufferSize);
+    /* manual test
+    printf("---------------Sting Stream--------------------\n");
+    struct fwStringStream *probass = fwssInit(50);
+    printf("position: %d\n", probass->position);
+    printf("nextPosition: %d\n", probass->nextPosition);
+    printf("maxBufferSize: %d\n", probass->maxBufferSize);
 
     printf("\n");
 
     char *szoveg = "sajt";
-    if(!fwAddToBuffer(proba, szoveg, 3))
+    if(!fwssAddToBuffer(probass, szoveg, 3))
         printf("Hiba!\n");
-    printf("position: %d\n", proba->position);
-    printf("nextPosition: %d\n", proba->nextPosition);
-    printf("buffer: %s\n", proba->buffer);
+    printf("position: %d\n", probass->position);
+    printf("nextPosition: %d\n", probass->nextPosition);
+    printf("buffer: %s\n", probass->buffer);
 
     printf("\n");
 
-    if(!fwAddToBuffer(proba, szoveg, 1))
+    if(!fwssAddToBuffer(probass, szoveg, 1))
         printf("Hiba!\n");
-    printf("position: %d\n", proba->position);
-    printf("nextPosition: %d\n", proba->nextPosition);
-    printf("buffer: %s\n", proba->buffer);
+    printf("position: %d\n", probass->position);
+    printf("nextPosition: %d\n", probass->nextPosition);
+    printf("buffer: %s\n", probass->buffer);
 
     printf("\n");
 
-    if(!fwLastRemoveInBuffer(proba, 1))
+    if(!fwssLastRemoveInBuffer(probass, 1))
         printf("Hiba!\n");
-    printf("position: %d\n", proba->position);
-    printf("nextPosition: %d\n", proba->nextPosition);
-    printf("buffer: %s\n", proba->buffer);
+    printf("position: %d\n", probass->position);
+    printf("nextPosition: %d\n", probass->nextPosition);
+    printf("buffer: %s\n", probass->buffer);
 
     printf("\n");
 
-    fwClearBuffer(proba);
-    printf("position: %d\n", proba->position);
-    printf("nextPosition: %d\n", proba->nextPosition);
-    printf("buffer: %s\n", proba->buffer);
+    char *szoveg2 = "sajt";
+    if(!fwssPasteToBuffer(probass, 2, szoveg2, 22))
+        printf("Hiba!\n");
+    printf("position: %d\n", probass->position);
+    printf("nextPosition: %d\n", probass->nextPosition);
+    printf("buffer: %s\n", probass->buffer);
 
     printf("\n");
 
-    fwClose(proba);
+    fwssClearBuffer(probass);
+    printf("position: %d\n", probass->position);
+    printf("nextPosition: %d\n", probass->nextPosition);
+    printf("buffer: %s\n", probass->buffer);
+
+    printf("\n");
+
+    fwssClose(probass);
     szoveg = NULL;
+
+    printf("---------------FileWriter--------------------\n");
+
     szoveg = "123456789";
-    proba = fwInit("proba.txt", 0, 50);
+    struct FileWriter *proba = fwInit("proba.txt", 0, 50);
 
     if(!fwAddToBuffer(proba, szoveg, 6))
         printf("Hiba!\n");
@@ -143,8 +156,16 @@ int main(int argc, char *argv[]){
 
     printf("\n");
 
-    char *szoveg2 = "sajt";
+    szoveg2 = "sajt";
     if(!fwPasteToBuffer(proba, 3, szoveg2, 22))
+        printf("Hiba!\n");
+    printf("position: %d\n", proba->position);
+    printf("nextPosition: %d\n", proba->nextPosition);
+    printf("buffer: %s\n", proba->buffer);
+
+    printf("\n");
+
+    if(!fwWriteBuffer(proba))
         printf("Hiba!\n");
     printf("position: %d\n", proba->position);
     printf("nextPosition: %d\n", proba->nextPosition);
@@ -161,6 +182,8 @@ int main(int argc, char *argv[]){
     printf("\n");
 
     fwClose(proba);
+    */
+
 
     printf("fileWrite testing started\n");
     int result = test_fileWrite(argc, argv);
