@@ -90,29 +90,66 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
 
-    /*
+    /* manual test
     struct FileWriter *proba = fwInit("proba.txt", 0, 4);
     printf("position: %d\n", proba->position);
     printf("nextPosition: %d\n", proba->nextPosition);
     printf("maxBufferSize: %d\n", proba->maxBufferSize);
 
+    printf("\n");
+
     char *szoveg = "sajt";
-    if(!fwAddtoBuffer(proba, szoveg, 4))
-        printf("Televan!\n");
+    if(!fwAddtoBuffer(proba, szoveg, 3))
+        printf("Hiba!\n");
     printf("position: %d\n", proba->position);
     printf("nextPosition: %d\n", proba->nextPosition);
     printf("buffer: %s\n", proba->buffer);
 
-    if(!fwAddtoBuffer(proba, szoveg, 2))
-        printf("Televan!\n");
+    printf("\n");
+
+    if(!fwAddtoBuffer(proba, szoveg, 1))
+        printf("Hiba!\n");
     printf("position: %d\n", proba->position);
     printf("nextPosition: %d\n", proba->nextPosition);
     printf("buffer: %s\n", proba->buffer);
+
+    printf("\n");
+
+    if(!fwLastRemoveInBuffer(proba, 1))
+        printf("Hiba!\n");
+    printf("position: %d\n", proba->position);
+    printf("nextPosition: %d\n", proba->nextPosition);
+    printf("buffer: %s\n", proba->buffer);
+
+    printf("\n");
 
     fwClearBuffer(proba);
     printf("position: %d\n", proba->position);
     printf("nextPosition: %d\n", proba->nextPosition);
     printf("buffer: %s\n", proba->buffer);
+
+    printf("\n");
+
+    fwClose(proba);
+    szoveg = NULL;
+    szoveg = "123456789";
+    proba = fwInit("proba.txt", 0, 6);
+
+    if(!fwAddtoBuffer(proba, szoveg, 6))
+        printf("Hiba!\n");
+    printf("position: %d\n", proba->position);
+    printf("nextPosition: %d\n", proba->nextPosition);
+    printf("buffer: %s\n", proba->buffer);
+
+    printf("\n");
+
+    if(!fwRemoveInBuffer(proba, 0, 3))
+        printf("Hiba!\n");
+    printf("position: %d\n", proba->position);
+    printf("nextPosition: %d\n", proba->nextPosition);
+    printf("buffer: %s\n", proba->buffer);
+
+    printf("\n");
 
     fwClose(proba);
     */

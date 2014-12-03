@@ -23,8 +23,8 @@ fileWrite library
 struct FileWriter {
     FILE *file;
     char *buffer;
-    unsigned int nextPosition;
-    unsigned int position;
+    unsigned int nextPosition; //actual buffer length
+    unsigned int position; //last char position
     unsigned int maxBufferSize;
 };
 
@@ -51,12 +51,33 @@ int fwAddtoBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize)
 
 
 /**
- Clear date in FileWriter
+ Clear date in FileWriter Buffer
 
  @param fWriter FileWriter variable
  @return return 1 if everything is awesome, return 0 if error
 */
 int fwClearBuffer(struct FileWriter *fWriter);
+
+
+/**
+ Remove last n char in FileWriter Buffer
+
+ @param fWriter FileWriter variable
+ @param n number of characters
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwLastRemoveInBuffer(struct FileWriter *fWriter, unsigned int n);
+
+
+/**
+ Remove n char from x in FileWriter Buffer
+
+ @param fWriter FileWriter variable
+ @param x position of characters (begins in 0)
+ @param n number of characters (minimum 1)
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwRemoveInBuffer(struct FileWriter *fWriter, unsigned int x, unsigned int n);
 
 
 /**

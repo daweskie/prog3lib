@@ -159,10 +159,13 @@ struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBuff
     retVal->nextPosition = 0;
     retVal->position = 0;
 
-    if(append == 1)
-        retVal->file = fopen(pathname, "a");
-    else
+    if(!append)
         retVal->file = fopen(pathname, "w");
+    else
+        retVal->file = fopen(pathname, "a");
+
+    if(!retVal->file)
+        return NULL;
 
     return retVal;
 }
@@ -182,7 +185,7 @@ int fwAddtoBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize)
 
     fWriter->position = fWriter->nextPosition - 1;
 
-    *(fWriter->buffer+fWriter->nextPosition+1) = '\0';
+    *(fWriter->buffer+fWriter->nextPosition) = '\0';
 
     return 1;
 }
@@ -195,6 +198,55 @@ int fwClearBuffer(struct FileWriter *fWriter){
     fWriter->nextPosition = 0;
     fWriter->position = 0;
     *(fWriter->buffer) = '\0';
+
+    return 1;
+}
+
+
+int fwLastRemoveInBuffer(struct FileWriter *fWriter, unsigned int n){
+    if(notInitFileWriter(fWriter))
+        return 0;
+
+    if(fWriter->nextPosition < n)
+        return 0;
+
+    if(fWriter->nextPosition == n)
+        return fwClearBuffer(fWriter);
+
+    fWriter->nextPosition -= n;
+    fWriter->position -= n;
+    *(fWriter->buffer+fWriter->nextPosition) = '\0';
+
+    return 1;
+}
+
+
+int fwRemoveInBuffer(struct FileWriter *fWriter, unsigned int x, unsigned int n){
+    if(notInitFileWriter(fWriter) || n == 0)
+        return 0;
+
+    if(fWriter->nextPosition < x+n)
+        return 0;
+
+    /* handled function
+    if(fWriter->nextPosition == n)
+        return fwClearBuffer(fWriter);*/
+
+    //initial removal position
+    fWriter->position = x;
+    //safety work if no add new char
+    *(fWriter->buffer+fWriter->position) = '\0';
+
+    unsigned int i;
+    //copy final not removed char
+    for(i=0; *(fWriter->buffer+fWriter->position+n+i); i++)
+        *(fWriter->buffer+fWriter->position+i) = *(fWriter->buffer+fWriter->position+n+i);
+
+    //final work
+    fWriter->nextPosition = x+i;
+    fWriter->position = (x+i-1 == -1) ? 0 : x+i-1 ;
+    *(fWriter->buffer+fWriter->position+1) = '\0';
+
 
     return 1;
 }
