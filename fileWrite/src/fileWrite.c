@@ -147,6 +147,16 @@ struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBuff
     if (retVal == NULL)
         return NULL;
 
+    if(!append)
+        retVal->file = fopen(pathname, "w");
+    else
+        retVal->file = fopen(pathname, "a");
+
+    if(!retVal->file){
+        free(retVal);
+        return NULL;
+    }
+
     retVal->buffer = malloc(maxBufferSize+1);
     if (retVal->buffer == NULL) {
         free (retVal);
@@ -159,19 +169,11 @@ struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBuff
     retVal->nextPosition = 0;
     retVal->position = 0;
 
-    if(!append)
-        retVal->file = fopen(pathname, "w");
-    else
-        retVal->file = fopen(pathname, "a");
-
-    if(!retVal->file)
-        return NULL;
-
     return retVal;
 }
 
 
-int fwAddtoBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize){
+int fwAddToBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize){
     if(nullOrEmpty(data) || !dataSize || notInitFileWriter(fWriter))
         return 0;
 
@@ -247,6 +249,51 @@ int fwRemoveInBuffer(struct FileWriter *fWriter, unsigned int x, unsigned int n)
     fWriter->position = (x+i-1 == -1) ? 0 : x+i-1 ;
     *(fWriter->buffer+fWriter->position+1) = '\0';
 
+
+    return 1;
+}
+
+
+int fwPasteToBuffer(struct FileWriter *fWriter, unsigned int x, char *data, unsigned int dataSize){
+    if(nullOrEmpty(data) || !dataSize || notInitFileWriter(fWriter))
+        return 0;
+
+    if(dataSize > fWriter->maxBufferSize - fWriter->nextPosition)
+        return 0;
+
+    if(x > fWriter->nextPosition)
+        return 0;
+
+    int copyed = 0;
+    char *copy;
+    unsigned int i = 0;
+    //copy if found last date under position
+    if(fWriter->nextPosition-x != 0){
+        copy = malloc(fWriter->nextPosition-x+1);
+        if(!copy)
+            return 0;
+
+        copyed = 1;
+
+        for(; *(fWriter->buffer+x+i); i++){
+            *(copy+i) = *(fWriter->buffer+x+i);
+        }
+
+        if(!fwLastRemoveInBuffer(fWriter, i))
+            return 0;
+    }
+
+
+    if(!fwAddToBuffer(fWriter, data, dataSize))
+        return 0;
+
+    if(copyed){
+        if(!fwAddToBuffer(fWriter, copy, i))
+            return 0;
+
+        free(copy);
+        copy = NULL;
+    }
 
     return 1;
 }

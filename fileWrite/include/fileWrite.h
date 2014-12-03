@@ -40,14 +40,26 @@ struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBuff
 
 
 /**
- Add date to FileWriter
+ Add date to FileWriter Buffer
 
  @param fWriter FileWriter variable
  @param data Data
  @param dataSize data size
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwAddtoBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize);
+int fwAddToBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize);
+
+
+/**
+ Copy data to x position in FileWriter Buffer
+
+ @param fWriter FileWriter variable
+ @param x position in buffer (min = 0, max = nextPosition if not equal maxBufferSize)
+ @param data Data
+ @param dataSize data size
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwPasteToBuffer(struct FileWriter *fWriter, unsigned int x, char *data, unsigned int dataSize);
 
 
 /**
