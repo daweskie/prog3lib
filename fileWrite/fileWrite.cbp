@@ -38,10 +38,6 @@
 		<Unit filename="src/fileWrite.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="include/fwStringStream.h" />
-		<Unit filename="src/fwStringStream.c">
-			<Option compilerVar="CC" />
-		</Unit>
 		<Extensions>
 			<envvars />
 			<code_completion />
