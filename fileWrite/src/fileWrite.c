@@ -220,7 +220,7 @@ int fwClearBuffer(struct FileWriter *fWriter){
 
 
 int fwLastRemoveInBuffer(struct FileWriter *fWriter, unsigned int n){
-    if(notInitFileWriter(fWriter))
+    if(notInitFileWriter(fWriter) || n == 0)
         return 0;
 
     if(fWriter->nextPosition < n)
@@ -459,7 +459,7 @@ int fwssClearBuffer(struct FWStringStream *fwss){
 
 
 int fwssLastRemoveInBuffer(struct FWStringStream *fwss, unsigned int n){
-    if(notInitFWStringStream(fwss))
+    if(notInitFWStringStream(fwss) || n == 0)
         return 0;
 
     if(fwss->nextPosition < n)
