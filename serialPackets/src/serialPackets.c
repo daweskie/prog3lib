@@ -15,7 +15,7 @@ serialPackets
 */
 
 #include <serialPackets.h>
-//#include <macros.h>
+#include <macros.h>
 
 struct pool_t *pool_init(int pool_size, int item_size) {
     if (pool_size<=0 || item_size<=0)
@@ -48,10 +48,14 @@ struct pool_t *pool_init(int pool_size, int item_size) {
         TAILQ_INSERT_TAIL(&result0->un_head, packet, entries);
         TAILQ_INSERT_TAIL(&result1->val_head, packet, entries);
     }
-    struct Result *result;
+    /*struct Result *result;
     result->unused=result0;
-    result->valid=result1;
+    result->valid=result1;*/
 
 
-    return result;
+    return result0&&result1;
+}
+
+int pool_max_size(struct pool_t *pool){
+    return pool ? pool_t->[valid_t.max_size]:0;
 }

@@ -72,8 +72,8 @@ int n;
 };
 
 struct Result {
-    void *unused;
-    void *valid;
+    int *unused;
+    int *valid;
 };
 
 /** --------------------Actual beadando--------------------- */
