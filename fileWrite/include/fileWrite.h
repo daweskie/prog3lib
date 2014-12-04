@@ -122,7 +122,7 @@ char *fwCopyToString(struct FileWriter *fWriter);
 
 
 /**
- String Equal With Buffer Test
+ String Equal With FileWriter Buffer Test
 
  @param fWriter FileWriter variable
  @param str String
@@ -278,7 +278,7 @@ int fwssWriteBuffer(struct FWStringStream *fwss, const char *pathname, int appen
 
 
 /**
- Printf Buffer in FileWriter
+ Printf Buffer in FWStringStream
 
  @param fWriter FileWriter variable
  @return return 1 if everything is awesome, return 0 if error
@@ -287,7 +287,7 @@ int fwssPrintfBuffer(struct FWStringStream *fwss);
 
 
 /**
- Copy Buffer to String in FileWriter
+ Copy Buffer to String in FWStringStream
 
  @param fWriter FileWriter variable
  @return return string, return NULL if error
@@ -296,7 +296,7 @@ char *fwssCopyToString(struct FWStringStream *fwss);
 
 
 /**
- String Equal With Buffer Test
+ String Equal With FWStringStream Buffer Test
 
  @param fWriter FileWriter variable
  @param str String
