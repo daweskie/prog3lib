@@ -3,16 +3,7 @@
 
 /**  -----Structures------ */
 
-/**	Structure of Packets
-  address: the destination of the Packet
-  data: what the Packet contains
-  n: the size of data */
 
-struct Packet{
-char *address;
-char *data;
-int n;
-}
 
 /**Structure of Unused */
 
@@ -143,11 +134,11 @@ void valid_give(struct Valid *valid, struct Packet *packet);
 
 
 
+//struct pool_t *pool_init(int pool_size, int item_size);
 
-
-struct PacketFifo *spInit(unsigned int maxPackets, u_int16_t mtu);
+struct PacketFifo *spInit(unsigned int maxPackets, uint16_t mtu);
 int spClose(struct PacketFifo *fifo);
-u_int16_t spGetMtu(struct PacketFifo *fifo);
+uint16_t spGetMtu(struct PacketFifo *fifo);
 int spGetMaxPackets(struct PacketFifo *fifo);
 struct Packet *spGetPacketFromPool(struct PacketFifo *fifo);
 void spRecycle(struct PacketFifo *fifo, struct Packet *packet);
@@ -159,3 +150,72 @@ long spGetErrorPacketCounts(struct PacketFifo *fifo);
 long spGetOverrunCounts(struct PacketFifo *fifo);
 void spIncErrorCounts(struct PacketFifo *fifo);
 void spIncOverrunCounts(struct PacketFifo *fifo);
+
+/**	Structure of Packets
+  address: the destination of the Packet
+  data: what the Packet contains
+  n: the size of data */
+
+struct Packet{
+char *address;
+char *data;
+int n;
+}
+
+struct pool_t *spPool_init(int pool_size, int packet_size);
+
+struct pool_t{
+    struct unused_t{
+        /** Tail queue un_head. */
+        struct un_tailhead *un_headp;
+
+        /** TAILQ declaration */
+        TAILQ_HEAD(un_tailhead, Packet) un_head;
+
+        /**  Mutex for multithread using  */
+        pthread_mutex_t mutex;
+
+        /** Current size of pool */
+        int un_size;
+
+        /** Max number of element in the pool */
+        int max_size;
+
+        /** Size of a pool item */
+        int packet_size;
+
+        /** number of underflow for statistics. Means of underflow is try to get an element from an empty pool*/
+        int un_underflow;
+
+        /** number of overflow for statistics. Means of overflow is try to put back an element to a full pool */
+        int un_overflow;
+    };
+
+/**Structure of Unused */
+
+    struct valid_t{
+        /** Tail queue val_head. */
+        struct val_tailhead *val_headp;
+
+        /** TAILQ declaration */
+        TAILQ_HEAD(val_tailhead, Packet) val_head;
+
+       /**  Mutex for multithread using */
+        pthread_mutex_t mutex;
+
+        /** Current size of pool */
+        int val_size;
+
+        /** Max number of element in the pool */
+        int max_size;
+
+        /** Size of a pool item */
+        int packet_size;
+
+        /** number of underflow for statistics. Means of underflow is try to get an element from an empty pool*/
+        int val_underflow;
+
+        /** number of overflow for statistics. Means of overflow is try to put back an element to a full pool */
+        int val_overflow;
+    };
+};
