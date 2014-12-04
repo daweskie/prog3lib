@@ -124,6 +124,7 @@ int val_overflow(struct Valid *valid);
 
 struct pool_t *pool_init(int max_size, int packet_size);
 
+
 /** Closes serialPackets
     @param the pools
     @return 0 if failed, else if successful
@@ -131,9 +132,14 @@ struct pool_t *pool_init(int max_size, int packet_size);
 
 int spClose(struct pool_t *pool);
 
-/*          WTF???????????????----------------------
-    u_int16_t spGetMtu(struct PacketFifo *fifo);
+
+/** returns Maximum Transfer size
+    @param the pool
+    @return the maximum size of a Packet
 */
+
+uint16_t spGetMaxUnitSize(struct pool_t *pool);
+
 
 /** Maximum number of packets
     @param the pool
@@ -150,25 +156,57 @@ int spMaxPackets(struct pool_t *pool);
 
 struct Packet *unused_get(struct pool_t *pool);
 
-/**Put back packet to Unused
+
+/** Put back packet to Unused
     @param the pool.  It can be NULL
     @param the item to put back. It can be NULL.
-
+    @return the packet to put back
 */
+
 void unused_give(struct pool_t *pool, struct Packet *packet);
+
+
+/** Checks if
+    @param the pool
+    @return 1 if valid, 0 if not
+*/
+
+bool spIsValidPackets(struct pool_t *pool);
+
 
 /** Gets packet to Valid
     @param the pool.  It can be NULL
     @return the element or NULL if pool is NULL or pool is empty
-
 */
+
 struct Packet *valid_get(struct pool_t *pool);
 
-/**Gives packet from Unused
+
+/** Gives packet from Unused
     @param the pool.  It can be NULL
     @return the element or NULL if pool is NULL or pool is empty
 */
+
 void valid_give(struct pool_t *pool, struct Packet *packet);
+
+
+/** return number of packets in pool
+    @param the pool
+    @return number of packets (all of them)
+*/
+
+long packetCounts(struct pool_t *pool);
+
+
+/** returns number of all errors
+    @param the pool
+    @return number of all errors
+*/
+
+long packetErrors(struct pool_t *pool);
+
+
+
 
 #endif // SERIALPACKETS_H_INCLUDED
 
@@ -176,18 +214,25 @@ void valid_give(struct pool_t *pool, struct Packet *packet);
 
 
 
-/*
-struct PacketFifo *spInit(unsigned int maxPackets, u_int16_t mtu);
-int spClose(struct PacketFifo *fifo);
-u_int16_t spGetMtu(struct PacketFifo *fifo);
-int spGetMaxPackets(struct PacketFifo *fifo);
-struct Packet *spGetPacketFromPool(struct PacketFifo *fifo);
-void spRecycle(struct PacketFifo *fifo, struct Packet *packet);
+
+
+
+
+
+
+/*------------------Help from above--------------------
+struct PacketFifo *spInit(unsigned int maxPackets, u_int16_t mtu);          pipa
+int spClose(struct PacketFifo *fifo);                                       pipa
+u_int16_t spGetMtu(struct PacketFifo *fifo);                                pipa
+int spGetMaxPackets(struct PacketFifo *fifo);                               pipa
+struct Packet *spGetPacketFromPool(struct PacketFifo *fifo);                pipa
+void spRecycle(struct PacketFifo *fifo, struct Packet *packet);             pipa
 bool spIsValidPackets(struct PacketFifo *fifo);
-struct Packet *spGetPacket(struct PacketFifo *fifo);
-int spPutPacket(struct PacketFifo *fifo, struct Packet *packet);
-long spGetAllPacketCounts(struct PacketFifo *fifo);
-long spGetErrorPacketCounts(struct PacketFifo *fifo);
+struct Packet *spGetPacket(struct PacketFifo *fifo);                        pipa
+int spPutPacket(struct PacketFifo *fifo, struct Packet *packet);            pipa
+long spGetAllPacketCounts(struct PacketFifo *fifo);                         pipa
+long spGetErrorPacketCounts(struct PacketFifo *fifo);                       pipa
 long spGetOverrunCounts(struct PacketFifo *fifo);
 void spIncErrorCounts(struct PacketFifo *fifo);
 void spIncOverrunCounts(struct PacketFifo *fifo);
+/*
