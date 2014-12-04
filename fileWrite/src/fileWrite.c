@@ -639,8 +639,8 @@ int fwssClose(struct FWStringStream *fwss){
     if (!fwss)
         return 0;
 
-    free (fwss->buffer);
-    free (fwss);
+    free(fwss->buffer);
+    free(fwss);
     fwss = NULL;
 
     return 1;
