@@ -40,7 +40,7 @@ struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBuff
 
 
 /**
- Add date to FileWriter Buffer
+ Add data to FileWriter Buffer
 
  @param fWriter FileWriter variable
  @param data Data
@@ -63,7 +63,7 @@ int fwPasteToBuffer(struct FileWriter *fWriter, unsigned int x, char *data, unsi
 
 
 /**
- Clear date in FileWriter Buffer
+ Clear data in FileWriter Buffer
 
  @param fWriter FileWriter variable
  @return return 1 if everything is awesome, return 0 if error
@@ -93,7 +93,7 @@ int fwRemoveInBuffer(struct FileWriter *fWriter, unsigned int x, unsigned int n)
 
 
 /**
- Write date with FileWriter
+ Write data with FileWriter
 
  @param fWriter FileWriter variable
  @return return 1 if everything is awesome, return 0 if error

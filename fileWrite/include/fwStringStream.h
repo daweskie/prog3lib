@@ -39,7 +39,7 @@ struct FWStringStream *fwssInit(unsigned int maxBufferSize);
 
 
 /**
- Add date to FWStringStream Buffer
+ Add data to FWStringStream Buffer
 
  @param fwss FWStringStream variable
  @param data Data
@@ -62,7 +62,7 @@ int fwssPasteToBuffer(struct FWStringStream *fwss, unsigned int x, char *data, u
 
 
 /**
- Clear date in FWStringStream Buffer
+ Clear data in FWStringStream Buffer
 
  @param fwss FWStringStream variable
  @return return 1 if everything is awesome, return 0 if error
@@ -92,7 +92,7 @@ int fwssRemoveInBuffer(struct FWStringStream *fwss, unsigned int x, unsigned int
 
 
 /**
- Write date with FWStringStream
+ Write data with FWStringStream
 
  @param fwss FWStringStream variable
  @param pathname path and filename (Where?)
