@@ -8,7 +8,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/libserialPackets" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/serialPackets" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="" />
 				<Option object_output="obj/Debug/" />
 				<Option type="2" />
@@ -35,6 +35,9 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="include/serialPackets.h" />
+		<Unit filename="src/serialPackets.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
 			<envvars />
 			<code_completion />
