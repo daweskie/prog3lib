@@ -21,18 +21,25 @@ struct pool_t *pool_init(int pool_size, int item_size) {
     if (pool_size<=0 || item_size<=0)
         return NULL;
 
-    struct unused_t *result0;
-    struct valid_t *result1;
-    MALLOC(result0, sizeof(struct unused_t));
-    MALLOC(result1, sizeof(struct valid_t));
-    TAILQ_INIT(&result0->un_head);
-    TAILQ_INIT(&result1->val_head);
+    struct pool_t *result;
+
+    MALLOC(result, sizeof(struct pool_t));
+    bzero(result, sizeof(struct pool_t));
+
+
+
+//    MALLOC(result->unused, sizeof(struct unused_t));
+//    MALLOC(result->valid, sizeof(struct valid_t));
+
+    TAILQ_INIT(&result.unused->un_head);
+    TAILQ_INIT(&result.valid->...val_head);
     pthread_mutex_init(&result0->mutex, NULL);
     pthread_mutex_init(&result1->mutex, NULL);
-    result0->errorcnt=0;
-    result0->overruncnt=0;
-    result1->errorcnt=0;
-    result1->overruncnt=0;
+
+//    result.unused.errorcnt=0;
+//    result.unused.overruncnt=0;
+//    result1->errorcnt=0;
+//    result1->overruncnt=0;
     int i=0;
     result0->max_size = pool_size;
     result0->un_size=pool_size;
@@ -53,7 +60,7 @@ struct pool_t *pool_init(int pool_size, int item_size) {
     result->valid=result1;*/
 
 
-    return result0&&result1;
+    return result
 }
 
 int pool_max_size(struct pool_t *pool){

@@ -5,58 +5,60 @@
 #include <sys/queue.h>
 #include <pthread.h>
 /**  -----Structures------ */
-struct pool_t{
-    struct unused_t{
-        /** Tail queue un_head. */
-        struct un_tailhead *headp;
+struct unused_t {
+    /** Tail queue un_head. */
+    struct un_tailhead *headp;
 
-        /** TAILQ declaration */
-        TAILQ_HEAD(un_tailhead, Packet) un_head;
+    /** TAILQ declaration */
+    TAILQ_HEAD(un_tailhead, Packet) un_head;
 
-        /**  Mutex for multithread using  */
-        pthread_mutex_t mutex;
+    /**  Mutex for multithread using  */
+    pthread_mutex_t mutex;
 
-        /** Current size of pool */
-        int un_size;
+    /** Current size of pool */
+    int un_size;
 
-        /** Max number of element in the pool */
-        int max_size;
+    /** Max number of element in the pool */
+    int max_size;
 
-        /** Size of a pool item */
-        int packet_size;
+    /** Size of a pool item */
+    int packet_size;
 
-        /** number of underflow for statistics. Means of underflow is try to get an element from an empty pool*/
-        int errorcnt;
+    /** number of underflow for statistics. Means of underflow is try to get an element from an empty pool*/
+    int errorcnt;
 
-        /** number of overflow for statistics. Means of overflow is try to put back an element to a full pool */
-        int overruncnt;
-    };
+    /** number of overflow for statistics. Means of overflow is try to put back an element to a full pool */
+    int overruncnt;
+};
 
-    struct valid_t{
-        /** Tail queue val_head. */
-        struct val_tailhead *headp;
+struct valid_t {
+    /** Tail queue val_head. */
+    struct val_tailhead *headp;
 
-        /** TAILQ declaration */
-        TAILQ_HEAD(val_tailhead, Packet) val_head;
+    /** TAILQ declaration */
+    TAILQ_HEAD(val_tailhead, Packet) val_head;
 
-       /**  Mutex for multithread using */
-        pthread_mutex_t mutex;
+    /**  Mutex for multithread using */
+    pthread_mutex_t mutex;
 
-        /** Current size of pool */
-        int val_size;
+    /** Current size of pool */
+    int val_size;
+    /** Max number of element in the pool */
+    int max_size;
 
-        /** Max number of element in the pool */
-        int max_size;
+    /** Size of a pool item */
+    int packet_size;
 
-        /** Size of a pool item */
-        int packet_size;
+    /** number of underflow for statistics. Means of underflow is try to get an element from an empty pool*/
+    int errorcnt;
 
-        /** number of underflow for statistics. Means of underflow is try to get an element from an empty pool*/
-        int errorcnt;
+    /** number of overflow for statistics. Means of overflow is try to put back an element to a full pool */
+    int overruncnt;
+};
 
-        /** number of overflow for statistics. Means of overflow is try to put back an element to a full pool */
-        int overruncnt;
-    };
+struct pool_t {
+    struct unused_t unused;
+    struct valid_t valid;
 };
 
 /**	Structure of Packets
@@ -64,11 +66,11 @@ struct pool_t{
   data: what the Packet contains
   n: the size of data */
 
-struct Packet{
-TAILQ_ENTRY(Packet) entries;
-char *address;
-void *data;
-int n;
+struct Packet {
+    TAILQ_ENTRY(Packet) entries;
+    char *address;
+    void *data;
+    int n;
 };
 
 struct Result {
