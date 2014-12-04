@@ -15,56 +15,99 @@ fileWrite library
 
 */
 
+#include <sys/stat.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+
 struct FileWriter {
-    FILE lll
+    FILE *file;
+    char *buffer;
+    unsigned int nextPosition; //actual buffer length
+    unsigned int position; //last char position
+    unsigned int maxBufferSize;
 };
 
-struct FileWriter *fwInit(const char *pathname, int append, uint32_t bufferSize, uint16_t bufferCount);
-
-int fwClose(struct FileWriter *fWriter);
-
-int fwWriteBuffer(struct FileWriter *fWriter, char *buffer, uint32_t size);
-
-
 /**
- File Writer: write buffer to file, if not exits file or direction then the function create it
+ Initialise FileWriter variable
 
  @param pathname path and filename (Where?)
- @param buffer data for write (What?)
- @param nexists 0 if file or direction is not exits and you don't create it; 1 if you want create it
- @param content 0 if you would like re-write file; 1 if you would like to append a new data to the file
- @return return 1 if everything is awesome, return 0 if error, return 2 if created new file or direction
+ @param append 0 if you would like re-write file; 1 if you would like to append a new data to the file
+ @param maxBufferSize maximum buffer size
+ @return FileWriter variable
 */
-int fw_fileWrite(const char *pathname, const char *buffer, const char nexists, const char content);
+struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBufferSize);
 
 
 /**
- Default File Writer: write buffer to file, if not exits file or direction then the function create it
+ Add date to FileWriter Buffer
 
- @param pathname path and filename (Where?)
- @param buffer data for write (What?)
- @return return 1 if everything is awesome, return 0 if error, return 2 if created new file or direction
-*/
-int fw_fileWriteDefault(const char *pathname, const char *buffer);
-
-
-/**
- File Writer in TEMP: write buffer to file in temp, if not exits file or direction then the function create it
-
- @param filename filename
- @param buffer data for write (What?)
- @return return 1 if everything is awesome, return 0 if error, return 2 if created new file or direction
-*/
-int fw_fileWriteTemp(const char *filename, const char *buffer);
-
-
-/**
- Create file and write to TEMP/fw_{date}/{time}.txt
-
- @param buffer data for write (What?)
+ @param fWriter FileWriter variable
+ @param data Data
+ @param dataSize data size
  @return return 1 if everything is awesome, return 0 if error
 */
-int fw_fileWriteTempDefault(const char *buffer);
+int fwAddToBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize);
+
+
+/**
+ Copy data to x position in FileWriter Buffer
+
+ @param fWriter FileWriter variable
+ @param x position in buffer (min = 0, max = nextPosition if not equal maxBufferSize)
+ @param data Data
+ @param dataSize data size
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwPasteToBuffer(struct FileWriter *fWriter, unsigned int x, char *data, unsigned int dataSize);
+
+
+/**
+ Clear date in FileWriter Buffer
+
+ @param fWriter FileWriter variable
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwClearBuffer(struct FileWriter *fWriter);
+
+
+/**
+ Remove last n char in FileWriter Buffer
+
+ @param fWriter FileWriter variable
+ @param n number of characters
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwLastRemoveInBuffer(struct FileWriter *fWriter, unsigned int n);
+
+
+/**
+ Remove n char from x in FileWriter Buffer
+
+ @param fWriter FileWriter variable
+ @param x position of characters (begins in 0)
+ @param n number of characters (minimum 1)
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwRemoveInBuffer(struct FileWriter *fWriter, unsigned int x, unsigned int n);
+
+
+/**
+ Write date with FileWriter
+
+ @param fWriter FileWriter variable
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwWriteBuffer(struct FileWriter *fWriter);
+
+
+/**
+ close FileWriter variable
+
+ @param fWriter FileWriter variable
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwClose(struct FileWriter *fWriter);
 
 
 /**
@@ -73,7 +116,7 @@ int fw_fileWriteTempDefault(const char *buffer);
  @param pathname path and filename
  @return return 1 if file or direction is exits or 0 if not exits
 */
-int fw_exists(const char *pathname);
+int fwExists(const char *pathname);
 
 
 /**
@@ -82,7 +125,7 @@ int fw_exists(const char *pathname);
  @param pathname path and filename
  @return return 1 if it is file, 2 if it is direction, 0 if not exists
 */
-int fw_fod(const char *pathname);
+int fwFoD(const char *pathname);
 
 
 /**
@@ -91,7 +134,7 @@ int fw_fod(const char *pathname);
  @param pathname path and filename
  @return return 1 if delete file, 2 if delete direction, 0 if error
 */
-int fw_delete(const char *pathname);
+int fwDelete(const char *pathname);
 
 
 /**
@@ -100,7 +143,7 @@ int fw_delete(const char *pathname);
  @param pathname path and filename
  @return return 1 if read only or 0 if not
 */
-int fw_readOnly(const char *pathname);
+int fwReadOnly(const char *pathname);
 
 
 /**
@@ -109,7 +152,7 @@ int fw_readOnly(const char *pathname);
  @param pathname path and filename
  @return return 1 if can write, 0 if not
 */
-int fw_canWrite(const char *pathname);
+int fwCanWrite(const char *pathname);
 
 
 /**
@@ -118,4 +161,93 @@ int fw_canWrite(const char *pathname);
  @param pathname path and filename
  @return return 1 if everything is awesome, 0 error
 */
-int fw_mkdir(const char *pathname);
+int fwMkDir(const char *pathname);
+
+
+/**********String Stream********/
+struct fwStringStream {
+    char *buffer;
+    unsigned int nextPosition; //actual buffer length
+    unsigned int position; //last char position
+    unsigned int maxBufferSize;
+};
+
+/**
+ Initialise fwStringStream variable
+
+ @param maxBufferSize maximum buffer size
+ @return fwStringStream variable
+*/
+struct fwStringStream *fwssInit(unsigned int maxBufferSize);
+
+
+/**
+ Add date to fwStringStream Buffer
+
+ @param fwss fwStringStream variable
+ @param data Data
+ @param dataSize data size
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwssAddToBuffer(struct fwStringStream *fwss, char *data, unsigned int dataSize);
+
+
+/**
+ Copy data to x position in fwStringStream Buffer
+
+ @param fwss fwStringStream variable
+ @param x position in buffer (min = 0, max = nextPosition if not equal maxBufferSize)
+ @param data Data
+ @param dataSize data size
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwssPasteToBuffer(struct fwStringStream *fwss, unsigned int x, char *data, unsigned int dataSize);
+
+
+/**
+ Clear date in fwStringStream Buffer
+
+ @param fwss fwStringStream variable
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwssClearBuffer(struct fwStringStream *fwss);
+
+
+/**
+ Remove last n char in fwStringStream Buffer
+
+ @param fwss fwStringStream variable
+ @param n number of characters
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwssLastRemoveInBuffer(struct fwStringStream *fwss, unsigned int n);
+
+
+/**
+ Remove n char from x in fwStringStream Buffer
+
+ @param fwss fwStringStream variable
+ @param x position of characters (begins in 0)
+ @param n number of characters (minimum 1)
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwssRemoveInBuffer(struct fwStringStream *fwss, unsigned int x, unsigned int n);
+
+
+/**
+ Write date with fwStringStream
+
+ @param fwss fwStringStream variable
+ @param pathname path and filename (Where?)
+ @param append 0 if you would like re-write file; 1 if you would like to append a new data to the file
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwssWriteBuffer(struct fwStringStream *fwss, const char *pathname, int append);
+
+/**
+ close fwStringStream variable
+
+ @param fwss fwStringStream variable
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwssClose(struct fwStringStream *fwss);

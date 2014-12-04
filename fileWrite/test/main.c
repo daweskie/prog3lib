@@ -4,58 +4,58 @@
 #include <fileWrite.h>
 
 int test_exists(const char *path, const char *fullpath){
-    assert(fw_exists(path)!=0);
+    assert(fwExists(path)!=0);
     //assert(fw_exists(fullpath)!=0);
 }
 int test_n_exists(const char *path, const char *fullpath){
-    assert(fw_exists(path)==0);
-    assert(fw_exists(fullpath)==0);
+    assert(fwExists(path)==0);
+    assert(fwExists(fullpath)==0);
 }
 
 
 int test_fod(const char *path, const char *fullpath){
-    assert(fw_fod(path)==2);
+    assert(fwFoD(path)==2);
     //assert(fw_efod(fullpath)==1);
 }
 int test_n_fod(const char *path, const char *fullpath){
-    assert(fw_fod(path)==0);
-    assert(fw_fod(fullpath)==0);
+    assert(fwFoD(path)==0);
+    assert(fwFoD(fullpath)==0);
 }
 
 
 int test_mkdir(const char *path){
-    assert(fw_mkdir(path)==1);
+    assert(fwMkDir(path)==1);
 }
 int test_n_mkdir(const char *path){
-    assert(fw_mkdir(path)==0);
+    assert(fwMkDir(path)==0);
 }
 
 
 int test_delete(const char *path, const char *fullpath){
     //assert(fw_delete(fullpath)!=0);
-    assert(fw_delete(path)!=0);
+    assert(fwDelete(path)!=0);
 }
 int test_n_delete(const char *path, const char *fullpath){
-    assert(fw_delete(fullpath)==0);
-    assert(fw_delete(path)==0);
+    assert(fwDelete(fullpath)==0);
+    assert(fwDelete(path)==0);
 }
 
 
 int test_readOnly(const char *path, const char *fullpath){
-    assert(fw_readOnly(path)==0);
-    assert(fw_readOnly(fullpath)==0);
+    assert(fwReadOnly(path)==0);
+    assert(fwReadOnly(fullpath)==0);
 }
 
 
 int test_canWrite(const char *path, const char *fullpath){
-    assert(fw_canWrite(path)!=0);
+    assert(fwCanWrite(path)!=0);
     //assert(fw_canWrite(fullpath)!=0);
 }
 
 
 int clean(const char *path, const char *fullpath){
-    fw_delete(fullpath);
-    fw_delete(path);
+    fwDelete(fullpath);
+    fwDelete(path);
 }
 
 
@@ -89,6 +89,101 @@ int main(int argc, char *argv[]){
         printf("Usage: %s <path> <filename>\n", argv[0]);
         exit(EXIT_FAILURE);
     }
+
+    /* manual test
+    printf("---------------Sting Stream--------------------\n");
+    struct fwStringStream *probass = fwssInit(50);
+    printf("position: %d\n", probass->position);
+    printf("nextPosition: %d\n", probass->nextPosition);
+    printf("maxBufferSize: %d\n", probass->maxBufferSize);
+
+    printf("\n");
+
+    char *szoveg = "sajt";
+    if(!fwssAddToBuffer(probass, szoveg, 3))
+        printf("Hiba!\n");
+    printf("position: %d\n", probass->position);
+    printf("nextPosition: %d\n", probass->nextPosition);
+    printf("buffer: %s\n", probass->buffer);
+
+    printf("\n");
+
+    if(!fwssAddToBuffer(probass, szoveg, 1))
+        printf("Hiba!\n");
+    printf("position: %d\n", probass->position);
+    printf("nextPosition: %d\n", probass->nextPosition);
+    printf("buffer: %s\n", probass->buffer);
+
+    printf("\n");
+
+    if(!fwssLastRemoveInBuffer(probass, 1))
+        printf("Hiba!\n");
+    printf("position: %d\n", probass->position);
+    printf("nextPosition: %d\n", probass->nextPosition);
+    printf("buffer: %s\n", probass->buffer);
+
+    printf("\n");
+
+    char *szoveg2 = "sajt";
+    if(!fwssPasteToBuffer(probass, 2, szoveg2, 22))
+        printf("Hiba!\n");
+    printf("position: %d\n", probass->position);
+    printf("nextPosition: %d\n", probass->nextPosition);
+    printf("buffer: %s\n", probass->buffer);
+
+    printf("\n");
+
+    fwssClearBuffer(probass);
+    printf("position: %d\n", probass->position);
+    printf("nextPosition: %d\n", probass->nextPosition);
+    printf("buffer: %s\n", probass->buffer);
+
+    printf("\n");
+
+    fwssClose(probass);
+    szoveg = NULL;
+
+    printf("---------------FileWriter--------------------\n");
+
+    szoveg = "123456789";
+    struct FileWriter *proba = fwInit("proba.txt", 0, 50);
+
+    if(!fwAddToBuffer(proba, szoveg, 6))
+        printf("Hiba!\n");
+    printf("position: %d\n", proba->position);
+    printf("nextPosition: %d\n", proba->nextPosition);
+    printf("buffer: %s\n", proba->buffer);
+
+    printf("\n");
+
+    szoveg2 = "sajt";
+    if(!fwPasteToBuffer(proba, 3, szoveg2, 22))
+        printf("Hiba!\n");
+    printf("position: %d\n", proba->position);
+    printf("nextPosition: %d\n", proba->nextPosition);
+    printf("buffer: %s\n", proba->buffer);
+
+    printf("\n");
+
+    if(!fwWriteBuffer(proba))
+        printf("Hiba!\n");
+    printf("position: %d\n", proba->position);
+    printf("nextPosition: %d\n", proba->nextPosition);
+    printf("buffer: %s\n", proba->buffer);
+
+    printf("\n");
+
+    if(!fwRemoveInBuffer(proba, 3, 4))
+        printf("Hiba!\n");
+    printf("position: %d\n", proba->position);
+    printf("nextPosition: %d\n", proba->nextPosition);
+    printf("buffer: %s\n", proba->buffer);
+
+    printf("\n");
+
+    fwClose(proba);
+    */
+
 
     printf("fileWrite testing started\n");
     int result = test_fileWrite(argc, argv);

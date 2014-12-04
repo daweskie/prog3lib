@@ -15,20 +15,10 @@ socketclient library
 
 */
 
-
-
-
-struct sockaddr {
-    short int sin_family;  /* address family: AF_INET */
-    unsigned short int sin_port;  /* port */
-    struct in_addr sin_addr;  /* internet address */
-    unsigned char sin_zero[8];
-};
-
-struct in_addr{
-        unsigned long s_addr;  /* address in network byte order */
+struct sckClient {
 
 };
+
 /**
 
     @param family protokol család
@@ -37,8 +27,8 @@ struct in_addr{
     @return -1 hiba vagy file leíró
 */
 
-int socket(int family, int type,int protocol){
-};
+struct sckClient *sckclInit(int family, int type,int protocol);
+
 /**
 
     @param fd file leíró
@@ -49,34 +39,31 @@ int socket(int family, int type,int protocol){
 */
 
 
-int connect(int fd, struct sockaddr *addr, int alen){
-};
+int sckConnect(struct sckClient *client, char *host, uint16_t port);
 
 /**
 
     @param socket file leíró
     @param üzenet
     @param üzenet hossz
-    @return Ok 0 hiba -1
+    @return number of bytes written to socket
 */
 
-int write(int fd, char *buff, int len){
-};
+int write(struct sckClient *client, char *buff, int len);
+
 /**
 
     @param socket file leíró
     @param üzenet
     @param üzenet hossz
-    @return Ok 0 hiba -1
+    @return number of bytes readed
 */
 
-int read(int fd, char *buff, int len){
-};
+int read(struct sckClient *client, char *buff, int len);
 
 /**
     @param fd socket file leíró
-    @return Ok 0 hiba -1
+    @return 0 if error or 1 if ok
 */
 
-int close(int fd){
-};
+int close(struct sckClient *client);
