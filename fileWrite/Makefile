@@ -3,7 +3,6 @@
 ZLIB=../
 
 MODULE=fileWrite
-MODULE2=fwStringStream
 
 DEBUG ?= y
 
@@ -22,7 +21,6 @@ INCLUDE_DIR+=-I ./include
 OBJS=$(patsubst src/%.c,obj/$(ARCH)/%.o,$(wildcard src/*.c))
 
 BIN_NAME=$(BIN_ROOT)/$(ARCH)/lib$(MODULE).a
-BIN_NAME=$(BIN_ROOT)/$(ARCH)/lib$(MODULE2).a
 
 $(info ==============================================)
 $(info objs:$(OBJS))

@@ -16,7 +16,6 @@ BIN_NAME=$(BIN_ROOT)/$(ARCH)/test
 INCLUDE_DIR+=-I ../include
 LIB_PATH+=-L ../lib/$(ARCH)
 LIB+=-l fileWrite
-LIB+=-l fwStringStream
 
 $(info ==============================================)
 $(info arch:$(ARCH))
