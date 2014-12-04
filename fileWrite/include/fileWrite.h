@@ -49,7 +49,7 @@ struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBuff
  @param dataSize data size
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwAddToBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize);
+int fwAddToBuffer(struct FileWriter *fWriter, const char *data, unsigned int dataSize);
 
 
 /**
@@ -61,7 +61,7 @@ int fwAddToBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize)
  @param dataSize data size
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwPasteToBuffer(struct FileWriter *fWriter, unsigned int x, char *data, unsigned int dataSize);
+int fwPasteToBuffer(struct FileWriter *fWriter, unsigned int x, const char *data, unsigned int dataSize);
 
 
 /**
@@ -119,6 +119,16 @@ int fwPrintfBuffer(struct FileWriter *fWriter);
  @return return string, return NULL if error
 */
 char *fwCopyToString(struct FileWriter *fWriter);
+
+
+/**
+ String Equal With Buffer Test
+
+ @param fWriter FileWriter variable
+ @param str String
+ @return return 1 if equal, return 0 if not equal
+*/
+int fwEqualWithBuffer(struct FileWriter *fWriter, const char *str);
 
 
 /**
@@ -184,8 +194,8 @@ int fwCanWrite(const char *pathname);
 int fwMkDir(const char *pathname);
 
 
-/*--------------------String Stream--------------------------*/
 
+/*--------------------String Stream--------------------------*/
 
 struct FWStringStream {
     char *buffer;
@@ -211,7 +221,7 @@ struct FWStringStream *fwssInit(unsigned int maxBufferSize);
  @param dataSize data size
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwssAddToBuffer(struct FWStringStream *fwss, char *data, unsigned int dataSize);
+int fwssAddToBuffer(struct FWStringStream *fwss, const char *data, unsigned int dataSize);
 
 
 /**
@@ -223,7 +233,7 @@ int fwssAddToBuffer(struct FWStringStream *fwss, char *data, unsigned int dataSi
  @param dataSize data size
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwssPasteToBuffer(struct FWStringStream *fwss, unsigned int x, char *data, unsigned int dataSize);
+int fwssPasteToBuffer(struct FWStringStream *fwss, unsigned int x, const char *data, unsigned int dataSize);
 
 
 /**
@@ -265,6 +275,35 @@ int fwssRemoveInBuffer(struct FWStringStream *fwss, unsigned int x, unsigned int
  @return return 1 if everything is awesome, return 0 if error
 */
 int fwssWriteBuffer(struct FWStringStream *fwss, const char *pathname, int append);
+
+
+/**
+ Printf Buffer in FileWriter
+
+ @param fWriter FileWriter variable
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwssPrintfBuffer(struct FWStringStream *fwss);
+
+
+/**
+ Copy Buffer to String in FileWriter
+
+ @param fWriter FileWriter variable
+ @return return string, return NULL if error
+*/
+char *fwssCopyToString(struct FWStringStream *fwss);
+
+
+/**
+ String Equal With Buffer Test
+
+ @param fWriter FileWriter variable
+ @param str String
+ @return return 1 if equal, return 0 if not equal
+*/
+int fwssEqualWithBuffer(struct FWStringStream *fwss, const char *str);
+
 
 /**
  close FWStringStream variable

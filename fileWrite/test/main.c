@@ -91,7 +91,7 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
 
-    /* manual test*/
+    /* manual test
     printf("---------------Sting Stream--------------------\n");
     struct FWStringStream *probass = fwssInit(50);
     printf("position: %d\n", probass->position);
@@ -183,15 +183,19 @@ int main(int argc, char *argv[]){
     printf("\n");
 
     fwClose(proba);
-    /**/
+
 
 
     proba = fwInit("proba.txt", 0, 50);
-    szoveg = "ablak";
-    fwAddToBuffer(proba, szoveg, 6);
+    szoveg = "";
+    //fwAddToBuffer(proba, szoveg, 6);
     fwPrintfBuffer(proba);
-    //szoveg2 = fwCopyToString(proba);
-    //printf(fwCopyToString(proba));
+    szoveg2 = fwCopyToString(proba);
+    if(fwEqualWithBuffer(proba, szoveg))
+        printf("ok\n");
+
+    fwClose(proba);
+    /* */
 
     printf("fileWrite testing started\n");
     int result = test_fileWrite(argc, argv);
