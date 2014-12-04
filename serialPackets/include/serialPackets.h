@@ -1,11 +1,14 @@
 #ifndef SERIALPACKETS_H_INCLUDED
 #define SERIALPACKETS_H_INCLUDED
 
+#include <stdint.h>
+#include <sys/queue.h>
+#include <pthread.h>
 /**  -----Structures------ */
 struct pool_t{
     struct unused_t{
         /** Tail queue un_head. */
-        struct un_tailhead *un_headp;
+        struct un_tailhead *headp;
 
         /** TAILQ declaration */
         TAILQ_HEAD(un_tailhead, Packet) un_head;
@@ -23,15 +26,15 @@ struct pool_t{
         int packet_size;
 
         /** number of underflow for statistics. Means of underflow is try to get an element from an empty pool*/
-        int un_underflow;
+        int errorcnt;
 
         /** number of overflow for statistics. Means of overflow is try to put back an element to a full pool */
-        int un_overflow;
+        int overruncnt;
     };
 
     struct valid_t{
         /** Tail queue val_head. */
-        struct val_tailhead *val_headp;
+        struct val_tailhead *headp;
 
         /** TAILQ declaration */
         TAILQ_HEAD(val_tailhead, Packet) val_head;
@@ -49,10 +52,10 @@ struct pool_t{
         int packet_size;
 
         /** number of underflow for statistics. Means of underflow is try to get an element from an empty pool*/
-        int val_underflow;
+        int errorcnt;
 
         /** number of overflow for statistics. Means of overflow is try to put back an element to a full pool */
-        int val_overflow;
+        int overruncnt;
     };
 };
 
@@ -62,11 +65,16 @@ struct pool_t{
   n: the size of data */
 
 struct Packet{
+TAILQ_ENTRY(Packet) entries;
 char *address;
-char *data;
+void *data;
 int n;
-}
+};
 
+struct Result {
+    void *unused;
+    void *valid;
+};
 
 /** --------------------Actual beadando--------------------- */
 
@@ -125,7 +133,7 @@ void unused_give(struct pool_t *pool, struct Packet *packet);
     @param  the pool
     @return 0 if pool is out of valid packets, or anything else for available packets*/
 
-bool spIsValidPackets(struct pool_t *pool);
+int spIsValidPackets(struct pool_t *pool);
 
 
 /** Gets packet to Valid
@@ -149,7 +157,7 @@ void valid_give(struct pool_t *pool, struct Packet *packet);
     @return number of packets (all of them)
 */
 
-long packetCounts(struct pool_t *pool);
+long spPacketCounts(struct pool_t *pool);
 
 
 /** returns number of all errors
@@ -157,7 +165,7 @@ long packetCounts(struct pool_t *pool);
     @return number of all errors
 */
 
-long packetErrors(struct pool_t *pool);
+long spPacketErrors(struct pool_t *pool);
 
 /**Number of overruns, when a packet needed to put back to an already full pool
     @param the pool
@@ -208,4 +216,4 @@ long spGetErrorPacketCounts(struct PacketFifo *fifo);                       pipa
 long spGetOverrunCounts(struct PacketFifo *fifo);                           pipa
 void spIncErrorCounts(struct PacketFifo *fifo);                             pipa
 void spIncOverrunCounts(struct PacketFifo *fifo);                           pipa
-/*
+*/
