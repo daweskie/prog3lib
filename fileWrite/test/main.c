@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <fileWrite.h>
-#include <fwStringStream.h>
 
 int test_exists(const char *path, const char *fullpath){
     assert(fwExists(path)!=0);
