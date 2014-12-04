@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <fileWrite.h>
+#include <fwStringStream.h>
 
 int test_exists(const char *path, const char *fullpath){
     assert(fwExists(path)!=0);
@@ -90,9 +91,9 @@ int main(int argc, char *argv[]){
         exit(EXIT_FAILURE);
     }
 
-    /* manual test
+    /* manual test */
     printf("---------------Sting Stream--------------------\n");
-    struct fwStringStream *probass = fwssInit(50);
+    struct FWStringStream *probass = fwssInit(50);
     printf("position: %d\n", probass->position);
     printf("nextPosition: %d\n", probass->nextPosition);
     printf("maxBufferSize: %d\n", probass->maxBufferSize);
@@ -182,7 +183,6 @@ int main(int argc, char *argv[]){
     printf("\n");
 
     fwClose(proba);
-    */
 
 
     printf("fileWrite testing started\n");
