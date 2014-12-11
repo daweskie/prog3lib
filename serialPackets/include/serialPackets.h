@@ -73,10 +73,10 @@ struct Packet {
     int n;
 };
 
-struct Result {
+/*struct Result {
     int *unused;
     int *valid;
-};
+};*/
 
 /** --------------------Actual beadando--------------------- */
 
@@ -159,7 +159,7 @@ void valid_give(struct pool_t *pool, struct Packet *packet);
     @return number of packets (all of them)
 */
 
-long spPacketCounts(struct pool_t *pool);
+uint16_t spPacketCounts(struct pool_t *pool);
 
 
 /** returns number of all errors
@@ -173,21 +173,21 @@ long spPacketErrors(struct pool_t *pool);
     @param the pool
     @return number of overruns
 */
-long spGetOverrunCounts(struct PacketFifo *fifo);
+long spGetOverrunCounts(struct pool_t *pool);
 
 /**Increment the global error counter
     @param the pool
     @return 1 for ok, 0 for error
 
 */
-void spIncErrorCounts(struct PacketFifo *fifo);
+void spIncErrorCounts(struct pool_t *pool);
 
 /**Increment the overrun counter
     @param the pool
     @return 1 for ok, 0 for error
 
 */
-void spIncOverrunCounts(struct PacketFifo *fifo);
+void spIncOverrunCounts(struct pool_t *pool);
 
 
 
