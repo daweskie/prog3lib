@@ -160,7 +160,7 @@ void valid_give(struct pool_t *pool, struct Packet *packet);
 */
 
 uint16_t spPacketCounts(struct pool_t *pool);
-
+https://developer.android.com/sdk/installing/index.html?pkg=tools
 
 /** returns number of all errors
     @param the pool

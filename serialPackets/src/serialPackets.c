@@ -55,13 +55,10 @@ struct pool_t *pool_init(int pool_size, int item_size) {
         MALLOC(packet->data, item_size);
         bzero(packet->data, item_size);
         TAILQ_INSERT_TAIL(&result->unused.un_head, packet, entries);
-        TAILQ_INSERT_TAIL(&result->valid.val_head, packet, entries);
     }
     /*struct Result *result;
     result->unused=result0;
     result->valid=result1;*/
-
-
     return result;
 }
 
