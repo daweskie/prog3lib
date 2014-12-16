@@ -11,8 +11,20 @@ DEBUG ?=y
 
 include $(ZLIB)/settings.mk
 
+
+
 OBJS=$(patsubst $(SRC)/%.c,$(OBJ_ROOT)/$(ARCH)/%.o,$(wildcard $(SRC)/*.c))
 BIN_NAME=$(BIN_ROOT)/$(ARCH)/test
+# include fileWrite
+LIB_PATH+=-L $(ZLIB)/fileWrite/lib/$(ARCH)
+LIB+=-l fileWrite
+INCLUDE_DIR+=-I $(ZLIB)/fileWrite/include
+USE_UTIL=y
+
+# include logging
+LIB_PATH+=-L $(ZLIB)/logging/lib/$(ARCH)
+LIB+=-l logging
+INCLUDE_DIR+=-I $(ZLIB)/logging/include
 
 $(info ==============================================)
 $(info arch:$(ARCH))

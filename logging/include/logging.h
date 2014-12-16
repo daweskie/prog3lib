@@ -14,6 +14,9 @@
 logging library
 
 */
+#include <stdio.h>//Alap fuggvenyek miatt!
+#include <stdlib.h> //Alap fuggvenyek miatt!
+#include <string.h> //strlen miatt!
 
 /**
  Export log info with FileWriter; Output format: Date|type|app name|text; Default folder: /var/log/mylog
@@ -23,7 +26,7 @@ logging library
  @param value text
  @return 1 OK, 0 not work
 */
-int logging_out(char type, char * app_name, char * value);
+int logging_out(int type, char * app_name, char * value);
 
 
 
