@@ -168,6 +168,16 @@ There is a config settings to controlling which messages are writeable to the lo
 The log function is need to be enough flexible - like printf - to accept messages, different variables and so on.
 The log system automatically writes the current date to every messages.
 
+8. Timer
+
+A modul which can timing a predefined time. After the timer is fired, the modul call a callback function to signaling 
+the end of timing. 
+- Timer resolution is choosable as ms, sec, min, or hour
+- Let a client register a new timer event with the selected resolution and value and callback function. 
+(It can be placed a linked list)
+- Let the client set cycled parameter to cyclic repeating.
+- Let the existing event restartable (suggestion: assign an unique identifier to an event, client can reference an event by this identifier)
+- Let the clients can cancel a stated timer
 
 
 

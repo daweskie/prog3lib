@@ -16,6 +16,12 @@ BIN_ROOT=lib
 
 include $(ZLIB)/settings.mk
 
+# include fileWrite
+LIB_PATH+=-L $(ZLIB)/fileWrite/lib/$(ARCH)
+LIB+=-l fileWrite
+INCLUDE_DIR+=-I $(ZLIB)/fileWrite/include
+USE_UTIL=y
+
 INCLUDE_DIR+=-I ./include
 
 OBJS=$(patsubst src/%.c,obj/$(ARCH)/%.o,$(wildcard src/*.c))

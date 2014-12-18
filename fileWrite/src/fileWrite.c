@@ -15,7 +15,7 @@
 */
 #include <fileWrite.h>
 
-int nullOrEmpty(const char *str){
+int fwNullOrEmpty(const char *str){
     if (!(str && *str))
         return 1;
 
@@ -23,8 +23,19 @@ int nullOrEmpty(const char *str){
 }
 
 
+unsigned int fwStringLength(const char *str){
+    register unsigned int i = 0;
+    register char * c = str;
+    while(*(c+i)){
+        i++;
+    }
+
+    return i;
+}
+
+
 int fwFoD(const char *pathname){
-    if(nullOrEmpty(pathname))
+    if(fwNullOrEmpty(pathname))
         return 0;
 
     struct stat st;
@@ -48,7 +59,7 @@ int fwFoD(const char *pathname){
 
 
 int fwExists(const char *pathname){
-    if(nullOrEmpty(pathname))
+    if(fwNullOrEmpty(pathname))
         return 0;
 
     if(fwFoD(pathname) == 1 || fwFoD(pathname) == 2)
@@ -59,7 +70,7 @@ int fwExists(const char *pathname){
 
 
 int fwMkDir(const char *pathname){
-    if(nullOrEmpty(pathname))
+    if(fwNullOrEmpty(pathname))
         return 0;
 
     struct stat st;
@@ -72,7 +83,7 @@ int fwMkDir(const char *pathname){
 
 
 int fwReadOnly(const char *pathname){
-    if(nullOrEmpty(pathname))
+    if(fwNullOrEmpty(pathname))
         return 0;
 
     struct stat st;
@@ -92,7 +103,7 @@ int fwReadOnly(const char *pathname){
 
 
 int fwCanWrite(const char *pathname){
-    if(nullOrEmpty(pathname))
+    if(fwNullOrEmpty(pathname))
         return 0;
 
     struct stat st;
@@ -112,7 +123,7 @@ int fwCanWrite(const char *pathname){
 
 
 int fwDelete(const char *pathname){
-    if(nullOrEmpty(pathname))
+    if(fwNullOrEmpty(pathname))
         return 0;
 
     switch(fwFoD(pathname)){
@@ -132,7 +143,7 @@ int fwDelete(const char *pathname){
 
 
 int notInitFileWriter(struct FileWriter *fWriter){
-    if(!(fWriter && fWriter->file && fWriter->buffer))
+    if(!(fWriter && fWriter->file && fWriter->buffer && fWriter->maxBufferSize))
         return 1;
 
     return 0;
@@ -140,7 +151,7 @@ int notInitFileWriter(struct FileWriter *fWriter){
 
 
 struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBufferSize){
-    if(nullOrEmpty(pathname))
+    if(fwNullOrEmpty(pathname))
         return NULL;
 
     if(!maxBufferSize)
@@ -176,8 +187,8 @@ struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBuff
 }
 
 
-int fwAddToBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize){
-    if(nullOrEmpty(data) || !dataSize || notInitFileWriter(fWriter))
+int fwAddToBuffer(struct FileWriter *fWriter, const char *data, unsigned int dataSize){
+    if(fwNullOrEmpty(data) || !dataSize || notInitFileWriter(fWriter))
         return 0;
 
     if(dataSize > fWriter->maxBufferSize - fWriter->nextPosition)
@@ -209,7 +220,7 @@ int fwClearBuffer(struct FileWriter *fWriter){
 
 
 int fwLastRemoveInBuffer(struct FileWriter *fWriter, unsigned int n){
-    if(notInitFileWriter(fWriter))
+    if(notInitFileWriter(fWriter) || n == 0)
         return 0;
 
     if(fWriter->nextPosition < n)
@@ -250,15 +261,15 @@ int fwRemoveInBuffer(struct FileWriter *fWriter, unsigned int x, unsigned int n)
     //final work
     fWriter->nextPosition = x+i;
     fWriter->position = (x+i-1 == -1) ? 0 : x+i-1 ;
-    *(fWriter->buffer+fWriter->position+1) = '\0';
+    *(fWriter->buffer+fWriter->nextPosition) = '\0';
 
 
     return 1;
 }
 
 
-int fwPasteToBuffer(struct FileWriter *fWriter, unsigned int x, char *data, unsigned int dataSize){
-    if(nullOrEmpty(data) || !dataSize || notInitFileWriter(fWriter))
+int fwPasteToBuffer(struct FileWriter *fWriter, unsigned int x, const char *data, unsigned int dataSize){
+    if(fwNullOrEmpty(data) || !dataSize || notInitFileWriter(fWriter))
         return 0;
 
     if(dataSize > fWriter->maxBufferSize - fWriter->nextPosition)
@@ -310,6 +321,64 @@ int fwWriteBuffer(struct FileWriter *fWriter){
 }
 
 
+int fwPrintfBuffer(struct FileWriter *fWriter){
+    if(notInitFileWriter(fWriter))
+        return 0;
+
+    if(fwNullOrEmpty(fWriter->buffer))
+        return 0;
+
+    printf("%s\n", fWriter->buffer);
+
+    return 1;
+}
+
+
+char *fwCopyToString(struct FileWriter *fWriter){
+    if(notInitFileWriter(fWriter))
+        return NULL;
+
+    if(fWriter->nextPosition == 0)
+        return NULL;
+
+    char * c = malloc(fWriter->nextPosition+1);
+    if(!c)
+        return NULL;
+
+    unsigned int i;
+    for(i=0; *(fWriter->buffer+i); i++){
+        *(c+i) = *(fWriter->buffer+i);
+    }
+    *(c+i) = '\0';
+
+    return c;
+}
+
+
+int fwEqualWithBuffer(struct FileWriter *fWriter, const char *str){
+    if(notInitFileWriter(fWriter))
+        return 0;
+
+    //'\0' == '\0'
+    if(fwNullOrEmpty(str) && fwNullOrEmpty(fWriter->buffer))
+        return 1;
+
+    if(fwNullOrEmpty(str))
+        return 0;
+
+    if(fWriter->nextPosition != fwStringLength(str))
+        return 0;
+
+    unsigned int i;
+    for(i=0; i<fWriter->nextPosition; i++){
+        if(*(str+i) != *(fWriter->buffer+i))
+            return 0;
+    }
+
+    return 1;
+}
+
+
 int fwClose(struct FileWriter *fWriter){
     if (!fWriter)
         return 0;
@@ -323,8 +392,9 @@ int fwClose(struct FileWriter *fWriter){
 }
 
 
-/**********String Stream********/
-int notInitfwStringStream(struct fwStringStream *fwss){
+/*--------------------String Stream--------------------------*/
+
+int notInitFWStringStream(struct FWStringStream *fwss){
     if(!(fwss && fwss->buffer))
         return 1;
 
@@ -332,11 +402,11 @@ int notInitfwStringStream(struct fwStringStream *fwss){
 }
 
 
-struct fwStringStream *fwssInit(unsigned int maxBufferSize){
+struct FWStringStream *fwssInit(unsigned int maxBufferSize){
     if(!maxBufferSize)
         return NULL;
 
-    struct fwStringStream *retVal = malloc(sizeof(struct fwStringStream));
+    struct FWStringStream *retVal = malloc(sizeof(struct FWStringStream));
     if (!retVal)
         return NULL;
 
@@ -356,8 +426,8 @@ struct fwStringStream *fwssInit(unsigned int maxBufferSize){
 }
 
 
-int fwssAddToBuffer(struct fwStringStream *fwss, char *data, unsigned int dataSize){
-    if(nullOrEmpty(data) || !dataSize || notInitfwStringStream(fwss))
+int fwssAddToBuffer(struct FWStringStream *fwss, const char *data, unsigned int dataSize){
+    if(fwNullOrEmpty(data) || !dataSize || notInitFWStringStream(fwss))
         return 0;
 
     if(dataSize > fwss->maxBufferSize - fwss->nextPosition)
@@ -376,8 +446,8 @@ int fwssAddToBuffer(struct fwStringStream *fwss, char *data, unsigned int dataSi
 }
 
 
-int fwssClearBuffer(struct fwStringStream *fwss){
-    if(notInitfwStringStream(fwss))
+int fwssClearBuffer(struct FWStringStream *fwss){
+    if(notInitFWStringStream(fwss))
         return 0;
 
     fwss->nextPosition = 0;
@@ -388,15 +458,15 @@ int fwssClearBuffer(struct fwStringStream *fwss){
 }
 
 
-int fwssLastRemoveInBuffer(struct fwStringStream *fwss, unsigned int n){
-    if(notInitfwStringStream(fwss))
+int fwssLastRemoveInBuffer(struct FWStringStream *fwss, unsigned int n){
+    if(notInitFWStringStream(fwss) || n == 0)
         return 0;
 
     if(fwss->nextPosition < n)
         return 0;
 
     if(fwss->nextPosition == n)
-        return fwClearBuffer(fwss);
+        return fwssClearBuffer(fwss);
 
     fwss->nextPosition -= n;
     fwss->position -= n;
@@ -406,8 +476,8 @@ int fwssLastRemoveInBuffer(struct fwStringStream *fwss, unsigned int n){
 }
 
 
-int fwssRemoveInBuffer(struct fwStringStream *fwss, unsigned int x, unsigned int n){
-    if(notInitfwStringStream(fwss) || n == 0)
+int fwssRemoveInBuffer(struct FWStringStream *fwss, unsigned int x, unsigned int n){
+    if(notInitFWStringStream(fwss) || n == 0)
         return 0;
 
     if(fwss->nextPosition < x+n)
@@ -437,8 +507,8 @@ int fwssRemoveInBuffer(struct fwStringStream *fwss, unsigned int x, unsigned int
 }
 
 
-int fwssPasteToBuffer(struct fwStringStream *fwss, unsigned int x, char *data, unsigned int dataSize){
-    if(nullOrEmpty(data) || !dataSize || notInitfwStringStream(fwss))
+int fwssPasteToBuffer(struct FWStringStream *fwss, unsigned int x, const char *data, unsigned int dataSize){
+    if(fwNullOrEmpty(data) || !dataSize || notInitFWStringStream(fwss))
         return 0;
 
     if(dataSize > fwss->maxBufferSize - fwss->nextPosition)
@@ -482,11 +552,11 @@ int fwssPasteToBuffer(struct fwStringStream *fwss, unsigned int x, char *data, u
 }
 
 
-int fwssWriteBuffer(struct fwStringStream *fwss, const char *pathname, int append){
-    if(notInitfwStringStream(fwss))
+int fwssWriteBuffer(struct FWStringStream *fwss, const char *pathname, int append){
+    if(notInitFWStringStream(fwss))
         return 0;
 
-    if(nullOrEmpty(pathname))
+    if(fwNullOrEmpty(pathname))
         return 0;
 
     FILE * file;
@@ -507,12 +577,70 @@ int fwssWriteBuffer(struct fwStringStream *fwss, const char *pathname, int appen
 }
 
 
-int fwssClose(struct fwStringStream *fwss){
+int fwssPrintfBuffer(struct FWStringStream *fwss){
+    if(notInitFWStringStream(fwss))
+        return 0;
+
+    if(fwNullOrEmpty(fwss->buffer))
+        return 0;
+
+    printf("%s\n", fwss->buffer);
+
+    return 1;
+}
+
+
+char *fwssCopyToString(struct FWStringStream *fwss){
+    if(notInitFWStringStream(fwss))
+        return NULL;
+
+    if(fwss->nextPosition == 0)
+        return NULL;
+
+    char * c = malloc(fwss->nextPosition+1);
+    if(!c)
+        return NULL;
+
+    unsigned int i;
+    for(i=0; *(fwss->buffer+i); i++){
+        *(c+i) = *(fwss->buffer+i);
+    }
+    *(c+i) = '\0';
+
+    return c;
+}
+
+
+int fwssEqualWithBuffer(struct FWStringStream *fwss, const char *str){
+    if(notInitFWStringStream(fwss))
+        return 0;
+
+    //'\0' == '\0'
+    if(fwNullOrEmpty(str) && fwNullOrEmpty(fwss->buffer))
+        return 1;
+
+    if(fwNullOrEmpty(str))
+        return 0;
+
+    if(fwss->nextPosition != fwStringLength(str))
+        return 0;
+
+    unsigned int i;
+    for(i=0; i<fwss->nextPosition; i++){
+        if(*(str+i) != *(fwss->buffer+i))
+            return 0;
+    }
+
+    return 1;
+}
+
+
+int fwssClose(struct FWStringStream *fwss){
     if (!fwss)
         return 0;
 
-    free (fwss->buffer);
-    free (fwss);
+    free(fwss->buffer);
+    free(fwss);
     fwss = NULL;
 
     return 1;

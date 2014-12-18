@@ -14,27 +14,32 @@
 socketclient library
 
 */
+#include <sys/socket.h>
+
+
 
 struct sckClient {
+
+
 
 };
 
 /**
 
-    @param family protokol család
-    @param type pl SOCKET_STREAM
-    @param  protocol default a type és a family alapján
-    @return -1 hiba vagy file leíró
+    @param family address family
+    @param type  SOCKET_STREAM
+    @param  protocol default a type
+    @return 0 if error or socket number
 */
 
 struct sckClient *sckclInit(int family, int type,int protocol);
 
 /**
 
-    @param fd file leíró
-    @param *addr server cím
-    @param alen cim mérete
-    @return ok 0 hiba -1
+    @param data structure
+    @param *host server address
+    @param uint16_t
+    @return 0  if error or 1 if ok
 
 */
 
@@ -43,9 +48,9 @@ int sckConnect(struct sckClient *client, char *host, uint16_t port);
 
 /**
 
-    @param socket file leíró
-    @param üzenet
-    @param üzenet hossz
+    @param data structure
+    @param *buff  pointer data
+    @param len *buff data size
     @return number of bytes written to socket
 */
 
@@ -53,16 +58,16 @@ int write(struct sckClient *client, char *buff, int len);
 
 /**
 
-    @param socket file leíró
-    @param üzenet
-    @param üzenet hossz
+    @param  data structure
+    @param *buff pointer size
+    @param buff date size
     @return number of bytes readed
 */
 
 int read(struct sckClient *client, char *buff, int len);
 
 /**
-    @param fd socket file leíró
+    @param data structure
     @return 0 if error or 1 if ok
 */
 

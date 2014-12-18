@@ -1,3 +1,5 @@
+#ifndef FILEWRITE_H_INCLUDED
+#define FILEWRITE_H_INCLUDED
 /*
  * Copyright (C) 2014 Gergely Molnar & Kalman Szabadi
  *
@@ -40,14 +42,14 @@ struct FileWriter *fwInit(const char *pathname, int append, unsigned int maxBuff
 
 
 /**
- Add date to FileWriter Buffer
+ Add data to FileWriter Buffer
 
  @param fWriter FileWriter variable
  @param data Data
  @param dataSize data size
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwAddToBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize);
+int fwAddToBuffer(struct FileWriter *fWriter, const char *data, unsigned int dataSize);
 
 
 /**
@@ -59,11 +61,11 @@ int fwAddToBuffer(struct FileWriter *fWriter, char *data, unsigned int dataSize)
  @param dataSize data size
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwPasteToBuffer(struct FileWriter *fWriter, unsigned int x, char *data, unsigned int dataSize);
+int fwPasteToBuffer(struct FileWriter *fWriter, unsigned int x, const char *data, unsigned int dataSize);
 
 
 /**
- Clear date in FileWriter Buffer
+ Clear data in FileWriter Buffer
 
  @param fWriter FileWriter variable
  @return return 1 if everything is awesome, return 0 if error
@@ -93,12 +95,40 @@ int fwRemoveInBuffer(struct FileWriter *fWriter, unsigned int x, unsigned int n)
 
 
 /**
- Write date with FileWriter
+ Write data with FileWriter
 
  @param fWriter FileWriter variable
  @return return 1 if everything is awesome, return 0 if error
 */
 int fwWriteBuffer(struct FileWriter *fWriter);
+
+
+/**
+ Printf Buffer in FileWriter
+
+ @param fWriter FileWriter variable
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwPrintfBuffer(struct FileWriter *fWriter);
+
+
+/**
+ Copy Buffer to String in FileWriter
+
+ @param fWriter FileWriter variable
+ @return return string, return NULL if error
+*/
+char *fwCopyToString(struct FileWriter *fWriter);
+
+
+/**
+ String Equal With FileWriter Buffer Test
+
+ @param fWriter FileWriter variable
+ @param str String
+ @return return 1 if equal, return 0 if not equal
+*/
+int fwEqualWithBuffer(struct FileWriter *fWriter, const char *str);
 
 
 /**
@@ -164,8 +194,10 @@ int fwCanWrite(const char *pathname);
 int fwMkDir(const char *pathname);
 
 
-/**********String Stream********/
-struct fwStringStream {
+
+/*--------------------String Stream--------------------------*/
+
+struct FWStringStream {
     char *buffer;
     unsigned int nextPosition; //actual buffer length
     unsigned int position; //last char position
@@ -173,81 +205,112 @@ struct fwStringStream {
 };
 
 /**
- Initialise fwStringStream variable
+ Initialise FWStringStream variable
 
  @param maxBufferSize maximum buffer size
- @return fwStringStream variable
+ @return FWStringStream variable
 */
-struct fwStringStream *fwssInit(unsigned int maxBufferSize);
+struct FWStringStream *fwssInit(unsigned int maxBufferSize);
 
 
 /**
- Add date to fwStringStream Buffer
+ Add data to FWStringStream Buffer
 
- @param fwss fwStringStream variable
+ @param fwss FWStringStream variable
  @param data Data
  @param dataSize data size
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwssAddToBuffer(struct fwStringStream *fwss, char *data, unsigned int dataSize);
+int fwssAddToBuffer(struct FWStringStream *fwss, const char *data, unsigned int dataSize);
 
 
 /**
- Copy data to x position in fwStringStream Buffer
+ Copy data to x position in FWStringStream Buffer
 
- @param fwss fwStringStream variable
+ @param fwss FWStringStream variable
  @param x position in buffer (min = 0, max = nextPosition if not equal maxBufferSize)
  @param data Data
  @param dataSize data size
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwssPasteToBuffer(struct fwStringStream *fwss, unsigned int x, char *data, unsigned int dataSize);
+int fwssPasteToBuffer(struct FWStringStream *fwss, unsigned int x, const char *data, unsigned int dataSize);
 
 
 /**
- Clear date in fwStringStream Buffer
+ Clear data in FWStringStream Buffer
 
- @param fwss fwStringStream variable
+ @param fwss FWStringStream variable
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwssClearBuffer(struct fwStringStream *fwss);
+int fwssClearBuffer(struct FWStringStream *fwss);
 
 
 /**
- Remove last n char in fwStringStream Buffer
+ Remove last n char in FWStringStream Buffer
 
- @param fwss fwStringStream variable
+ @param fwss FWStringStream variable
  @param n number of characters
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwssLastRemoveInBuffer(struct fwStringStream *fwss, unsigned int n);
+int fwssLastRemoveInBuffer(struct FWStringStream *fwss, unsigned int n);
 
 
 /**
- Remove n char from x in fwStringStream Buffer
+ Remove n char from x in FWStringStream Buffer
 
- @param fwss fwStringStream variable
+ @param fwss FWStringStream variable
  @param x position of characters (begins in 0)
  @param n number of characters (minimum 1)
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwssRemoveInBuffer(struct fwStringStream *fwss, unsigned int x, unsigned int n);
+int fwssRemoveInBuffer(struct FWStringStream *fwss, unsigned int x, unsigned int n);
 
 
 /**
- Write date with fwStringStream
+ Write data with FWStringStream
 
- @param fwss fwStringStream variable
+ @param fwss FWStringStream variable
  @param pathname path and filename (Where?)
  @param append 0 if you would like re-write file; 1 if you would like to append a new data to the file
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwssWriteBuffer(struct fwStringStream *fwss, const char *pathname, int append);
+int fwssWriteBuffer(struct FWStringStream *fwss, const char *pathname, int append);
+
 
 /**
- close fwStringStream variable
+ Printf Buffer in FWStringStream
 
- @param fwss fwStringStream variable
+ @param fWriter FileWriter variable
  @return return 1 if everything is awesome, return 0 if error
 */
-int fwssClose(struct fwStringStream *fwss);
+int fwssPrintfBuffer(struct FWStringStream *fwss);
+
+
+/**
+ Copy Buffer to String in FWStringStream
+
+ @param fWriter FileWriter variable
+ @return return string, return NULL if error
+*/
+char *fwssCopyToString(struct FWStringStream *fwss);
+
+
+/**
+ String Equal With FWStringStream Buffer Test
+
+ @param fWriter FileWriter variable
+ @param str String
+ @return return 1 if equal, return 0 if not equal
+*/
+int fwssEqualWithBuffer(struct FWStringStream *fwss, const char *str);
+
+
+/**
+ close FWStringStream variable
+
+ @param fwss FWStringStream variable
+ @return return 1 if everything is awesome, return 0 if error
+*/
+int fwssClose(struct FWStringStream *fwss);
+
+#endif // FILEWRITE_H_INCLUDED
