@@ -1,4 +1,18 @@
-
+/*
+ * Copyright (C)  2011 Zoltan Zidarics (Zamek)
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * DEVELOPERS : ANDRAS GARDANFALVI, DAVID DOBO
+ */
+/** \file main.c
+    \brief Main file of test
+*/
 #include <stdio.h>
 #include "../include/stimer.h"
 
@@ -54,38 +68,69 @@ void timer_callback_function_15_seconds(void * timer_id)
 
 int main(void)
 {
-	timer_id_t t1, t2, tn;
-	const unsigned int cuiOneShotTimersCount = 300;
-	timer_id_t OneShotTimersIds[cuiOneShotTimersCount];
+    printf("\n\nTIMER MODULE STARTED\n\n");
+    timer_id_t t1, t2, t3, t4, tn;
+    const unsigned int cuiOneShotTimersCount = 300;
+    timer_id_t OneShotTimersIds[cuiOneShotTimersCount];
 
- 	unsigned int uiTimersCounter = 0;
-	char cSymbolToExit;
-	if(stimer_initialize() == 0)
-	{
-		set_timer_for_linux();
-                t1 = stimer_create(TIMER_CYCLIC);
-                stimer_set_callback(t1, timer_callback_function_2_seconds, &t1);
-                stimer_set_time(t1, 2, TIMER_SECONDS);
-                stimer_start(t1);
+    unsigned int uiTimersCounter = 0;
+    char cSymbolToExit;
+    if(stimer_initialize() == 0)
+    {
+        set_timer_for_linux();
+        t1 = stimer_create(TIMER_CYCLIC);
+        stimer_set_callback(t1, timer_callback_function_2_seconds, &t1);
+        stimer_set_time(t1, 2, TIMER_SECONDS);
+        stimer_start(t1);
 
-		t2 = stimer_create(TIMER_CYCLIC);
-                stimer_set_callback(t2, timer_callback_function_5_seconds, &t2);
-		stimer_set_time(t2, 5, TIMER_SECONDS);
-		stimer_start(t2);
+        t2 = stimer_create(TIMER_CYCLIC);
+        stimer_set_callback(t2, timer_callback_function_5_seconds, &t2);
+        stimer_set_time(t2, 5, TIMER_SECONDS);
+        stimer_start(t2);
 
-		for(; uiTimersCounter < cuiOneShotTimersCount; ++uiTimersCounter)
-		{
-			tn = stimer_create(TIMER_ONESHOT);
-			OneShotTimersIds[uiTimersCounter] = tn; 
-			stimer_set_time(tn, 15, TIMER_SECONDS);
-			stimer_set_callback(tn, timer_callback_function_15_seconds, &OneShotTimersIds[uiTimersCounter]);
-			stimer_start((timer_id_t)tn);
-		}
-		
-		while(1) sleep(5);				
+        t3 = stimer_create(TIMER_ONESHOT);
+        //stimer_set_callback(t3, timer_callback_function_5_seconds, &t0);
+        stimer_set_time(t3, 5, TIMER_SECONDS);
+        stimer_start(t3);
 
-		stimer_finalize();
-	}
+        t4= stimer_create(TIMER_ONESHOT);
+        //stimer_set_callback(t4, timer_callback_function_5_seconds, &t0);
+        stimer_set_time(t4, 30, TIMER_SECONDS);
+        stimer_start(t4);
+
+
+
+        for(; uiTimersCounter < cuiOneShotTimersCount; ++uiTimersCounter)
+        {
+            tn = stimer_create(TIMER_ONESHOT);
+            OneShotTimersIds[uiTimersCounter] = tn;
+            stimer_set_time(tn, 15, TIMER_SECONDS);
+            stimer_set_callback(tn, timer_callback_function_15_seconds, &OneShotTimersIds[uiTimersCounter]);
+            stimer_start((timer_id_t)tn);
+        }
+
+        while (1)
+        {
+            if (stimer_timeout(t3))
+            {
+                printf("Timer 3: timeout - the first 5 seconds elapsed\n");
+
+            }
+            if (stimer_timeout(t4))
+            {
+                printf("Timer 4: timeout - 30 sec elapsed\n");
+                stimer_reset(t3);
+                stimer_start(t3);
+            }
+        }
+
+
+
+
+        while(1) sleep(5);
+
+        stimer_finalize();
+    }
 
     return 0;
 }

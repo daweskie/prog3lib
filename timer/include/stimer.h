@@ -43,20 +43,21 @@
 
 
 
-extern uint8_t		stimer_initialize();
-extern void		stimer_finalize();
-extern timer_id_t	stimer_create(uint8_t config);
-extern void		stimer_delete(timer_id_t timer_id);
-extern void		stimer_set_time(timer_id_t timer_id, uint16_t time, uint8_t time_unit);
+extern uint8_t		    stimer_initialize();
+extern void		        stimer_finalize();
+extern timer_id_t   	stimer_create(uint8_t config);
+extern void		        stimer_delete(timer_id_t timer_id);
+extern void		        stimer_set_time(timer_id_t timer_id, uint16_t time, uint8_t time_unit);
 extern uint8_t          stimer_set_callback(timer_id_t, timer_callback_t, void* callback_argument);
-extern uint16_t		stimer_get_time(timer_id_t timer_id, uint8_t time_unit);
-extern void		stimer_start(timer_id_t timer_id);
-extern void		stimer_pause(timer_id_t timer_id);
-extern void		stimer_stop(timer_id_t timer_id);
-extern void		stimer_reset(timer_id_t timer_id);
-extern uint8_t		stimer_status(timer_id_t timer_id);
-extern uint8_t		stimer_timeout(timer_id_t timer_id);
-extern void		stimer_clock(void);
+extern uint16_t		    stimer_get_time(timer_id_t timer_id, uint8_t time_unit);
+extern void		        stimer_start(timer_id_t timer_id);
+extern void		        stimer_pause(timer_id_t timer_id);
+extern void		        stimer_stop(timer_id_t timer_id);
+extern void		        stimer_reset(timer_id_t timer_id);
+//extern void             stimer_restart(timer_id_t timer_id);
+extern uint8_t		    stimer_status(timer_id_t timer_id);
+extern uint8_t		    stimer_timeout(timer_id_t timer_id);
+extern void		        stimer_clock(void);
 
 
 

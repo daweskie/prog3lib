@@ -1,3 +1,18 @@
+/*
+ * Copyright (C)  2011 Zoltan Zidarics (Zamek)
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * DEVELOPERS : ANDRAS GARDANFALVI, DAVID DOBO
+ */
+/** \file timer_list.h
+    \brief Header file for the timer's linked list unit
+*/
 #ifndef _TIMERS_LIST__H
 #define _TIMERS_LIST__H
 
@@ -8,22 +23,21 @@ typedef void (*timer_callback_t)(void *);
 
 struct stimer_t
 {
-	uint8_t                 config_status;
-	timer_id_t              timer_id;
-	uint16_t                time;
-	uint16_t                milisec;
-	uint8_t                 minutes;
-        timer_callback_t        callback_func;
-        void *                  callback_argument;
+    uint8_t                 config_status;
+    timer_id_t              timer_id;
+    uint16_t                time;
+    uint32_t                milisec;
+    timer_callback_t        callback_func;
+    void *                  callback_argument;
 };
 
 typedef struct stimer_t stimer_t;
 
 struct timer_list_node_t
 {
-	struct stimer_t		m_timer;
-	struct timer_list_node_t	*next_node;
-	struct timer_list_node_t	*previous_node;
+    struct stimer_t		m_timer;
+    struct timer_list_node_t	*next_node;
+    struct timer_list_node_t	*previous_node;
 };
 typedef struct timer_list_node_t timer_list_node_t;
 

@@ -35,7 +35,14 @@
 			<Add option="-Wall" />
 		</Compiler>
 		<Unit filename="include/stimer.h" />
+		<Unit filename="include/timers_list.h" />
 		<Unit filename="src/stimer.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="src/timer_list.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="test/main.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>

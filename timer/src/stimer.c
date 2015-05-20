@@ -11,7 +11,7 @@
  * DEVELOPERS : ANDRAS GARDANFALVI, DAVID DOBO
  */
 /** \file stimer.c
-    \brief main file of the timer unit
+    \brief Main file of the timer unit
 */
 
 #include <stdlib.h>
@@ -34,8 +34,8 @@ static timer_id_t  uiNextTimerId = 0;
 */
 uint8_t	stimer_initialize()
 {
-	Timers = create_timer_list();
-	return Timers == NULL ? 1 : 0;
+    Timers = create_timer_list();
+    return Timers == NULL ? 1 : 0;
 }
 
 /*!
@@ -43,7 +43,7 @@ uint8_t	stimer_initialize()
 */
 void	stimer_finalize()
 {
-	destroy_timer_list(&Timers);
+    destroy_timer_list(&Timers);
 }
 
 /*!
@@ -54,21 +54,21 @@ void	stimer_finalize()
 
 timer_id_t stimer_create(uint8_t config)
 {
-	stimer_t timer;
-	timer_list_node_t * added_list_node = NULL;
-	timer_id_t return_value = TIMER_ERROR;
+    stimer_t timer;
+    timer_list_node_t * added_list_node = NULL;
+    timer_id_t return_value = TIMER_ERROR;
 
-	timer.timer_id = uiNextTimerId++;
-	timer.config_status = (config & CONFIG_MASK);
-        timer.callback_func = NULL;
-        timer.callback_argument = NULL;
-	added_list_node = add_timer_to_list(Timers, timer);
-	if(added_list_node != NULL)
-	{
-		return_value = added_list_node->m_timer.timer_id;
-	}
+    timer.timer_id = uiNextTimerId++;
+    timer.config_status = (config & CONFIG_MASK);
+    timer.callback_func = NULL;
+    timer.callback_argument = NULL;
+    added_list_node = add_timer_to_list(Timers, timer);
+    if(added_list_node != NULL)
+    {
+        return_value = added_list_node->m_timer.timer_id;
+    }
 
-	return return_value;
+    return return_value;
 }
 
 /*!
@@ -78,7 +78,7 @@ timer_id_t stimer_create(uint8_t config)
 
 void stimer_delete(timer_id_t timer_id)
 {
-	remove_timer_from_list(Timers, timer_id);
+    remove_timer_from_list(Timers, timer_id);
 }
 
 /*!
@@ -92,35 +92,34 @@ void stimer_set_time(timer_id_t timer_id, uint16_t time, uint8_t time_unit)
 {
     stimer_t * timer = NULL;
 
-	timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
-	if(timer_node != NULL)
-	{
-		timer = &timer_node->m_timer;
-		timer->time = time;
+    timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
+    if(timer_node != NULL)
+    {
+        timer = &timer_node->m_timer;
+        timer->time = time;
 
-		time_unit &= TIME_UNIT_MASK;
-		timer->config_status &= ~TIME_UNIT_MASK;
-		timer->config_status |= time_unit;
+        time_unit &= TIME_UNIT_MASK;
+        timer->config_status &= ~TIME_UNIT_MASK;
+        timer->config_status |= time_unit;
 
-		timer->minutes = 0;
-		timer->milisec = time;
+        timer->milisec = time;
 
-		if (time_unit == TIMER_HOURS)
-		{
-			timer->minutes = ((time * 60) - 1);
-			timer->milisec = 60000;
-		}
-		else if (time_unit == TIMER_MINUTES)
-		{
-			timer->minutes = (time - 1);
-			timer->milisec = 60000;
-		}
-		else if (time_unit == TIMER_SECONDS)
-		{
-			timer->minutes = (uint8_t) (time / 60);
-			timer->milisec = (1000 * (time % 60));
-		}
-	}
+        if (time_unit == TIMER_HOURS)
+        {
+
+            timer->milisec = (time*3600000);
+        }
+        else if (time_unit == TIMER_MINUTES)
+        {
+
+            timer->milisec = (time*60000);
+        }
+        else if (time_unit == TIMER_SECONDS)
+        {
+
+            timer->milisec = (time*1000);
+        }
+    }
 }
 
 /*!
@@ -129,11 +128,11 @@ void stimer_set_time(timer_id_t timer_id, uint16_t time, uint8_t time_unit)
     @param callback_func        pointer to callback function
     @param callback_argument    argument that will be passed to callback
 */
-uint8_t stimer_set_callback(timer_id_t timer_id, timer_callback_t callback_func, 
-        void* callback_argument)
+uint8_t stimer_set_callback(timer_id_t timer_id, timer_callback_t callback_func,
+                            void* callback_argument)
 {
     uint8_t return_value = TIMER_ERROR;
-    
+
     timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
     if(timer_node != NULL)
     {
@@ -141,7 +140,7 @@ uint8_t stimer_set_callback(timer_id_t timer_id, timer_callback_t callback_func,
         timer_node->m_timer.callback_argument = callback_argument;
         return_value = 0;
     }
-    
+
     return return_value;
 }
 
@@ -157,41 +156,32 @@ uint16_t stimer_get_time(timer_id_t timer_id, uint8_t time_unit)
     stimer_t *timer = NULL;
     uint16_t time = 0;
 
-	timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
-	if(timer_node != NULL)
-	{
-		timer = &timer_node->m_timer;
-		time = timer->time;
-		time_unit &= TIME_UNIT_MASK;
+    timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
+    if(timer_node != NULL)
+    {
+        timer = &timer_node->m_timer;
+        time = timer->time;
+        time_unit &= TIME_UNIT_MASK;
 
-		if (time_unit == TIMER_HOURS)
-		{
-			time -= (timer->minutes / 60);
-			if (timer->milisec >= 30000 && time > 0)
-			{
-				time--;
-			}
-		}
-		else if (time_unit == TIMER_MINUTES)
-		{
-			time -= (timer->minutes);
-			if (timer->milisec >= 30000 && time > 0)
-			{
-				time--;
-			}
-		}
-		else if (time_unit == TIMER_SECONDS)
-		{
-			time -= (timer->minutes * 60);
-			time -= (timer->milisec / 1000);
-		}
-		else if (time_unit == TIMER_MILISEC)
-		{
-			time -= timer->milisec;
-		}
-	}
+        if (time_unit == TIMER_HOURS)
+        {
+            time -= (timer->milisec / 3600000);
+        }
+        else if (time_unit == TIMER_MINUTES)
+        {
+            time -= (timer->milisec / 60000);
+        }
+        else if (time_unit == TIMER_SECONDS)
+        {
+            time -= (timer->milisec / 1000);
+        }
+        else if (time_unit == TIMER_MILISEC)
+        {
+            time -= timer->milisec;
+        }
+    }
 
-	return time;
+    return time;
 }
 
 /*!
@@ -203,13 +193,13 @@ uint16_t stimer_get_time(timer_id_t timer_id, uint8_t time_unit)
 void stimer_start(timer_id_t timer_id)
 {
     stimer_t *timer;
-	timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
-	if(timer_node != NULL)
-	{
-		timer = &timer_node->m_timer;
-		timer->config_status &= ~STATUS_MASK;
-		timer->config_status |= TIMER_ON;
-	}
+    timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
+    if(timer_node != NULL)
+    {
+        timer = &timer_node->m_timer;
+        timer->config_status &= ~STATUS_MASK;
+        timer->config_status |= TIMER_ON;
+    }
 }
 
 /*!
@@ -221,13 +211,13 @@ void stimer_start(timer_id_t timer_id)
 void stimer_pause(timer_id_t timer_id)
 {
     stimer_t *timer;
-	timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
-	if(timer_node != NULL)
-	{
-		timer = &timer_node->m_timer;		
-		timer->config_status &= ~STATUS_MASK;
-		timer->config_status |= TIMER_PAUSED;
-	}
+    timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
+    if(timer_node != NULL)
+    {
+        timer = &timer_node->m_timer;
+        timer->config_status &= ~STATUS_MASK;
+        timer->config_status |= TIMER_PAUSED;
+    }
 }
 
 /*!
@@ -241,15 +231,15 @@ void stimer_stop(timer_id_t timer_id)
     stimer_t *timer;
     uint8_t time_unit;
 
-	timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
-	if(timer_node != NULL)
-	{
-		timer = &timer_node->m_timer;	
-		timer->config_status &= ~STATUS_MASK;
+    timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
+    if(timer_node != NULL)
+    {
+        timer = &timer_node->m_timer;
+        timer->config_status &= ~STATUS_MASK;
 
-		time_unit = (timer->config_status & TIME_UNIT_MASK);
-		stimer_set_time(timer_id, timer->time, time_unit);
-	}
+        time_unit = (timer->config_status & TIME_UNIT_MASK);
+        stimer_set_time(timer_id, timer->time, time_unit);
+    }
 }
 
 /*!
@@ -263,14 +253,16 @@ void stimer_reset(timer_id_t timer_id)
     stimer_t *timer;
     uint8_t time_unit;
 
-	timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
-	if(timer_node != NULL)
-	{
-		timer = &timer_node->m_timer;	
-		time_unit = (timer->config_status & TIME_UNIT_MASK);
-		stimer_set_time(timer_id, timer->time, time_unit);
-	}
+    timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
+    if(timer_node != NULL)
+    {
+        timer = &timer_node->m_timer;
+        time_unit = (timer->config_status & TIME_UNIT_MASK);
+        stimer_set_time(timer_id, timer->time, time_unit);
+    }
 }
+
+
 
 /*!
     status of the timer
@@ -281,14 +273,14 @@ void stimer_reset(timer_id_t timer_id)
 uint8_t stimer_status(timer_id_t timer_id)
 {
     stimer_t *timer;
-	uint8_t status = TIMER_ERROR;
+    uint8_t status = TIMER_ERROR;
 
-	timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
-	if(timer_node != NULL)
-	{
-		timer = &timer_node->m_timer;	
-		status = (timer->config_status & STATUS_MASK);
-	}
+    timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
+    if(timer_node != NULL)
+    {
+        timer = &timer_node->m_timer;
+        status = (timer->config_status & STATUS_MASK);
+    }
 
     return status;
 }
@@ -301,31 +293,31 @@ uint8_t stimer_status(timer_id_t timer_id)
 
 uint8_t stimer_timeout(timer_id_t timer_id)
 {
-	stimer_t *timer;
+    stimer_t *timer;
     uint8_t config, status, time_unit;
 
-	timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
-	if(timer_node != NULL)
-	{
-		timer = &timer_node->m_timer;	
-		config = (timer->config_status & CONFIG_MASK);
-		status = (timer->config_status & STATUS_MASK);
+    timer_list_node_t * timer_node = find_timer_node_by_id(Timers, timer_id);
+    if(timer_node != NULL)
+    {
+        timer = &timer_node->m_timer;
+        config = (timer->config_status & CONFIG_MASK);
+        status = (timer->config_status & STATUS_MASK);
 
-		if (status & TIMER_OVERFLOW)
-		{
-			timer->config_status &= ~STATUS_MASK;
+        if (status & TIMER_OVERFLOW)
+        {
+            timer->config_status &= ~STATUS_MASK;
 
-			if (TIMER_CYCLIC == (config & MODE_MASK))
-			{
-				time_unit = (timer->config_status & TIME_UNIT_MASK);
-				stimer_set_time(timer_id, timer->time, time_unit);
-				timer->config_status &= ~STATUS_MASK;
-				timer->config_status |= TIMER_ON;
-			}
+            if (TIMER_CYCLIC == (config & MODE_MASK))
+            {
+                time_unit = (timer->config_status & TIME_UNIT_MASK);
+                stimer_set_time(timer_id, timer->time, time_unit);
+                timer->config_status &= ~STATUS_MASK;
+                timer->config_status |= TIMER_ON;
+            }
 
-			return 1;
-		}
-	}
+            return 1;
+        }
+    }
 
     return 0;
 }
@@ -338,49 +330,44 @@ uint8_t stimer_timeout(timer_id_t timer_id)
 void stimer_clock(void)
 {
     stimer_t *timer;
-	uint8_t status;
-	uint8_t time_unit;
+    uint8_t status;
+    uint8_t time_unit;
 
-	timer_list_node_t * node = NULL;
-	for (node = Timers->next_node; node != NULL; node = node->next_node)
-	{
-		timer = &node->m_timer;
-		status = timer->config_status & STATUS_MASK;
+    timer_list_node_t * node = NULL;
+    for (node = Timers->next_node; node != NULL; node = node->next_node)
+    {
+        timer = &node->m_timer;
+        status = timer->config_status & STATUS_MASK;
 
-		if (status & TIMER_ON)
-		{
-			if (timer->milisec == 0)
+        if (status & TIMER_ON)
+        {
+            if (timer->milisec == 0)
             {
-                if (timer->minutes == 0)
-                {
-                        if (TIMER_CYCLIC == (timer->config_status & MODE_MASK))
-                        {
-                                time_unit = (timer->config_status & TIME_UNIT_MASK);
-                                stimer_set_time(timer->timer_id, timer->time, time_unit);
-                                timer->config_status &= ~STATUS_MASK;
-                                timer->config_status |= TIMER_ON;
-                        }
-			else
-			{
-		                timer->config_status &= ~STATUS_MASK;
-        	                timer->config_status |= TIMER_OVERFLOW;
-			}
 
-                    	if(timer->callback_func != NULL)
-                    	{
-                    	    timer->callback_func(timer->callback_argument);
-                    	}
+                if (TIMER_CYCLIC == (timer->config_status & MODE_MASK))
+                {
+                    time_unit = (timer->config_status & TIME_UNIT_MASK);
+                    stimer_set_time(timer->timer_id, timer->time, time_unit);
+                    timer->config_status &= ~STATUS_MASK;
+                    timer->config_status |= TIMER_ON;
                 }
                 else
                 {
-                    timer->milisec = 60000;
-                    timer->minutes--;
+                    timer->config_status &= ~STATUS_MASK;
+                    timer->config_status |= TIMER_OVERFLOW;
                 }
+
+                if(timer->callback_func != NULL)
+                {
+                    timer->callback_func(timer->callback_argument);
+                }
+
+
             }
             else
             {
                 timer->milisec--;
             }
-		}
-	}
+        }
+    }
 }
