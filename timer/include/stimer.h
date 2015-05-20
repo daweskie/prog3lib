@@ -18,14 +18,7 @@
 #define  LTIMER_H
 
 #include <stdint.h>
-	typedef int8_t si08;
-	typedef int16_t si16;
-	typedef int32_t si32;
-	typedef uint8_t ui08;
-	typedef uint16_t ui16;
-	typedef uint32_t ui32;
-
-
+#include "../include/timers_list.h"
 /* Status definitions */
 #define TIMER_OFF           0x00
 #define TIMER_ON			0x01
@@ -35,9 +28,6 @@
 
 #define TIMER_COUNTING      0x00
 #define TIMER_OVERFLOW      0x04
-
-#define TIMER_FREE          0x00
-#define TIMER_USED          0x08
 
 /* Configuration definitions */
 #define TIMER_ONESHOT       0x00
@@ -52,24 +42,21 @@
 #define TIMER_ERROR         0xFF
 
 
-//------------------------------------//
 
-#define TIMER_AMOUNT        10        // You can set here the amount of maximum timers
-
-//------------------------------------//
-
-
-extern ui08 stimer_create(ui08 config);
-extern void stimer_delete(ui08 timer_id);
-extern void stimer_set_time(ui08 timer_id, ui16 time, ui08 time_unit);
-extern ui16 stimer_get_time(ui08 timer_id, ui08 time_unit);
-extern void stimer_start(ui08 timer_id);
-extern void stimer_pause(ui08 timer_id);
-extern void stimer_stop(ui08 timer_id);
-extern void stimer_reset(ui08 timer_id);
-extern ui08 stimer_status(ui08 timer_id);
-extern ui08 stimer_timeout(ui08 timer_id);
-extern void stimer_clock(void);
+extern uint8_t		stimer_initialize();
+extern void		stimer_finalize();
+extern timer_id_t	stimer_create(uint8_t config);
+extern void		stimer_delete(timer_id_t timer_id);
+extern void		stimer_set_time(timer_id_t timer_id, uint16_t time, uint8_t time_unit);
+extern uint8_t          stimer_set_callback(timer_id_t, timer_callback_t, void* callback_argument);
+extern uint16_t		stimer_get_time(timer_id_t timer_id, uint8_t time_unit);
+extern void		stimer_start(timer_id_t timer_id);
+extern void		stimer_pause(timer_id_t timer_id);
+extern void		stimer_stop(timer_id_t timer_id);
+extern void		stimer_reset(timer_id_t timer_id);
+extern uint8_t		stimer_status(timer_id_t timer_id);
+extern uint8_t		stimer_timeout(timer_id_t timer_id);
+extern void		stimer_clock(void);
 
 
 
